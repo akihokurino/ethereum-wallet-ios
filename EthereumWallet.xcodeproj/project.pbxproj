@@ -24,6 +24,9 @@
 		02DE565F2795753900E28F40 /* ActivityIndicatorView in Frameworks */ = {isa = PBXBuildFile; productRef = 02DE565E2795753900E28F40 /* ActivityIndicatorView */; };
 		02DE56622795796000E28F40 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE56612795796000E28F40 /* DataStore.swift */; };
 		02DE566527957EC100E28F40 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE566427957EC100E28F40 /* Environment.swift */; };
+		02DE566A27957FFB00E28F40 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE566927957FFB00E28F40 /* Transaction.swift */; };
+		02DE566C2795806D00E28F40 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE566B2795806D00E28F40 /* APIClient.swift */; };
+		02DE566E2795821F00E28F40 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE566D2795821F00E28F40 /* Error.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +43,9 @@
 		02DE565B279574CF00E28F40 /* HUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUD.swift; sourceTree = "<group>"; };
 		02DE56612795796000E28F40 /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		02DE566427957EC100E28F40 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
+		02DE566927957FFB00E28F40 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
+		02DE566B2795806D00E28F40 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		02DE566D2795821F00E28F40 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,9 +134,20 @@
 		02DE56602795794800E28F40 /* Infra */ = {
 			isa = PBXGroup;
 			children = (
+				02DE566627957FDA00E28F40 /* Etherscan */,
 				02DE56612795796000E28F40 /* DataStore.swift */,
+				02DE566B2795806D00E28F40 /* APIClient.swift */,
+				02DE566D2795821F00E28F40 /* Error.swift */,
 			);
 			path = Infra;
+			sourceTree = "<group>";
+		};
+		02DE566627957FDA00E28F40 /* Etherscan */ = {
+			isa = PBXGroup;
+			children = (
+				02DE566927957FFB00E28F40 /* Transaction.swift */,
+			);
+			path = Etherscan;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -241,13 +258,16 @@
 			files = (
 				02A0B2BD2795660F00AE925C /* RootView.swift in Sources */,
 				02DE56442795670400E28F40 /* HistoryView.swift in Sources */,
+				02DE566A27957FFB00E28F40 /* Transaction.swift in Sources */,
 				02DE56462795670F00E28F40 /* HomeView.swift in Sources */,
 				02DE56622795796000E28F40 /* DataStore.swift in Sources */,
 				02DE565927956B7D00E28F40 /* HistoryVM.swift in Sources */,
 				02DE565727956B6F00E28F40 /* HomeVM.swift in Sources */,
+				02DE566C2795806D00E28F40 /* APIClient.swift in Sources */,
 				02DE565C279574CF00E28F40 /* HUD.swift in Sources */,
 				02A0B2BB2795660F00AE925C /* EthereumWalletApp.swift in Sources */,
 				02DE565527956B5E00E28F40 /* RootVM.swift in Sources */,
+				02DE566E2795821F00E28F40 /* Error.swift in Sources */,
 				02DE566527957EC100E28F40 /* Environment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

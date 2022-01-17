@@ -10,41 +10,50 @@ enum HistoryVM {
                     guard !state.isInitialized else {
                         return .none
                     }
-                
+
                     state.shouldShowHUD = true
 
-                    let flow = Future<Void, Never> { promise in
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                            promise(.success(()))
-                        }
-                    }
-
-                    return flow
-                        .subscribe(on: environment.backgroundQueue)
-                        .receive(on: environment.mainQueue)
-                        .eraseToEffect()
-                        .map { _ in true }
-                        .map(HistoryVM.Action.endInitialize)
-                case .endInitialize:
+                    return NetworkPublisher.publish(
+                        ListTransactionRequest(
+                            address: "0x1341048E3d37046Ca18A09EFB154Ea9771744f41",
+                            page: 1,
+                            limit: 10000
+                        )
+                    )
+                    .subscribe(on: environment.backgroundQueue)
+                    .receive(on: environment.mainQueue)
+                    .map { $0.result }
+                    .catchToEffect()
+                    .map(HistoryVM.Action.endInitialize)
+                case .endInitialize(.success(let transactions)):
+                    state.transactions = transactions
+                    state.isInitialized = true
+                    state.shouldShowHUD = false
+                    return .none
+                case .endInitialize(.failure(_)):
                     state.isInitialized = true
                     state.shouldShowHUD = false
                     return .none
                 case .startRefresh:
                     state.shouldPullToRefresh = true
 
-                    let flow = Future<Void, Never> { promise in
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                            promise(.success(()))
-                        }
-                    }
-
-                    return flow
-                        .subscribe(on: environment.backgroundQueue)
-                        .receive(on: environment.mainQueue)
-                        .eraseToEffect()
-                        .map { _ in true }
-                        .map(HistoryVM.Action.endRefresh)
-                case .endRefresh:
+                    return NetworkPublisher.publish(
+                        ListTransactionRequest(
+                            address: "0x1341048E3d37046Ca18A09EFB154Ea9771744f41",
+                            page: 1,
+                            limit: 10000
+                        )
+                    )
+                    .subscribe(on: environment.backgroundQueue)
+                    .receive(on: environment.mainQueue)
+                    .map { $0.result }
+                    .catchToEffect()
+                    .map(HistoryVM.Action.endRefresh)
+                case .endRefresh(.success(let transactions)):
+                    state.transactions = transactions
+                    state.shouldPullToRefresh = false
+                    return .none
+                case .endRefresh(.failure(_)):
                     state.shouldPullToRefresh = false
                     return .none
                 case .shouldShowHUD(let val):
@@ -61,9 +70,9 @@ enum HistoryVM {
 extension HistoryVM {
     enum Action: Equatable {
         case startInitialize
-        case endInitialize(Bool)
+        case endInitialize(Result<[Transaction], AppError>)
         case startRefresh
-        case endRefresh(Bool)
+        case endRefresh(Result<[Transaction], AppError>)
         case shouldShowHUD(Bool)
         case shouldPullToRefresh(Bool)
     }
@@ -72,6 +81,7 @@ extension HistoryVM {
         var shouldShowHUD = false
         var shouldPullToRefresh = false
         var isInitialized = false
+        var transactions: [Transaction] = []
     }
 
     struct Environment {
