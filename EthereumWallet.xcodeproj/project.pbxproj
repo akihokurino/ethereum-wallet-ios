@@ -23,6 +23,7 @@
 		02DE565C279574CF00E28F40 /* HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE565B279574CF00E28F40 /* HUD.swift */; };
 		02DE565F2795753900E28F40 /* ActivityIndicatorView in Frameworks */ = {isa = PBXBuildFile; productRef = 02DE565E2795753900E28F40 /* ActivityIndicatorView */; };
 		02DE56622795796000E28F40 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE56612795796000E28F40 /* DataStore.swift */; };
+		02DE566527957EC100E28F40 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE566427957EC100E28F40 /* Environment.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		02DE565827956B7D00E28F40 /* HistoryVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryVM.swift; sourceTree = "<group>"; };
 		02DE565B279574CF00E28F40 /* HUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUD.swift; sourceTree = "<group>"; };
 		02DE56612795796000E28F40 /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
+		02DE566427957EC100E28F40 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,7 @@
 				02DE56602795794800E28F40 /* Infra */,
 				02DE565327956B3E00E28F40 /* TCA */,
 				02DE5642279566C400E28F40 /* UI */,
+				02DE566427957EC100E28F40 /* Environment.swift */,
 				02A0B2BA2795660F00AE925C /* EthereumWalletApp.swift */,
 				02A0B2BE2795661000AE925C /* Assets.xcassets */,
 				02A0B2C02795661000AE925C /* Preview Content */,
@@ -137,6 +140,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02A0B2C52795661000AE925C /* Build configuration list for PBXNativeTarget "EthereumWallet" */;
 			buildPhases = (
+				02DE566327957E6D00E28F40 /* Env */,
 				02A0B2B32795660F00AE925C /* Sources */,
 				02A0B2B42795660F00AE925C /* Frameworks */,
 				02A0B2B52795660F00AE925C /* Resources */,
@@ -209,6 +213,27 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		02DE566327957E6D00E28F40 /* Env */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Env;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/build-env.sh\" \"${SRCROOT}/.env\" \"${SRCROOT}/${PROJECT}\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		02A0B2B32795660F00AE925C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -223,6 +248,7 @@
 				02DE565C279574CF00E28F40 /* HUD.swift in Sources */,
 				02A0B2BB2795660F00AE925C /* EthereumWalletApp.swift in Sources */,
 				02DE565527956B5E00E28F40 /* RootVM.swift in Sources */,
+				02DE566527957EC100E28F40 /* Environment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
