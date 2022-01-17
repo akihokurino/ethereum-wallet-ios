@@ -13,7 +13,7 @@ enum HistoryVM {
 
                     state.shouldShowHUD = true
 
-                    return NetworkPublisher.publish(
+                    return EtherscanClient.publish(
                         ListTransactionRequest(
                             address: "0x1341048E3d37046Ca18A09EFB154Ea9771744f41",
                             page: 1,
@@ -37,7 +37,7 @@ enum HistoryVM {
                 case .startRefresh:
                     state.shouldPullToRefresh = true
 
-                    return NetworkPublisher.publish(
+                    return EtherscanClient.publish(
                         ListTransactionRequest(
                             address: "0x1341048E3d37046Ca18A09EFB154Ea9771744f41",
                             page: 1,

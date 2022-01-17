@@ -1,9 +1,9 @@
 import Alamofire
+import Combine
 import Foundation
 import SwiftUI
-import Combine
 
-protocol BaseAPIProtocol {
+protocol EtherscanAPIProtocol {
     associatedtype ResponseType
 
     var method: HTTPMethod { get }
@@ -13,7 +13,7 @@ protocol BaseAPIProtocol {
     var allowsConstrainedNetworkAccess: Bool { get }
 }
 
-extension BaseAPIProtocol {
+extension EtherscanAPIProtocol {
     var baseURL: URL {
         return URL(string: Env["ETHERSCAN_API_URL"]!)!
     }
@@ -27,12 +27,12 @@ extension BaseAPIProtocol {
     }
 }
 
-protocol BaseRequestProtocol: BaseAPIProtocol, URLRequestConvertible {
+protocol EtherscanRequestProtocol: EtherscanAPIProtocol, URLRequestConvertible {
     var parameters: Parameters? { get }
     var encoding: URLEncoding { get }
 }
 
-extension BaseRequestProtocol {
+extension EtherscanRequestProtocol {
     var encoding: URLEncoding {
         return URLEncoding.default
     }
@@ -52,7 +52,7 @@ extension BaseRequestProtocol {
     }
 }
 
-struct NetworkPublisher {
+struct EtherscanClient {
     private static let successRange = 200 ..< 300
     private static let contentType = "application/json"
     private static let retryCount: Int = 1
@@ -63,26 +63,16 @@ struct NetworkPublisher {
     }()
 
     static func publish<T, V>(_ request: T) -> Future<V, AppError>
-        where T: BaseRequestProtocol, V: Codable, T.ResponseType == V
+        where T: EtherscanRequestProtocol, V: Codable, T.ResponseType == V
     {
         return Future { promise in
             let api = AF.request(request)
                 .validate(statusCode: self.successRange)
                 .validate(contentType: [self.contentType])
-                .responseJSON { response in
+                .responseDecodable(of: V.self) { response in
                     switch response.result {
-                    case .success:
-                        do {
-                            if let data = response.data {
-                                let result = try self.decorder.decode(V.self, from: data)
-                                promise(.success(result))
-                            } else {
-                                promise(.failure(AppError.defaultError()))
-                            }
-
-                        } catch {
-                            promise(.failure(AppError.defaultError()))
-                        }
+                    case let .success(result):
+                        promise(.success(result))
                     case let .failure(error):
                         promise(.failure(AppError.plain(error.errorDescription ?? "エラーが発生しました")))
                     }

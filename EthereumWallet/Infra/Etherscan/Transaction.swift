@@ -1,7 +1,7 @@
 import Alamofire
 import Foundation
 
-class ListTransactionRequest: BaseRequestProtocol {
+class ListTransactionRequest: EtherscanRequestProtocol {
     typealias ResponseType = TransactionList
     
     let address: String

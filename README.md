@@ -9,5 +9,6 @@
 - web3swift ( https://github.com/skywinder/web3swift )
 - faucet ( https://faucet.ropsten.be/ )
 - geth ( https://geth.ethereum.org/ )
+- alamofire ( https://github.com/Alamofire/Alamofire )
 
 ## Images
