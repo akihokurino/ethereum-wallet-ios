@@ -81,7 +81,7 @@ extension HistoryVM {
     }
 
     struct State: Equatable {
-        let address: String
+        let address: EthereumAddress
 
         var shouldShowHUD = false
         var shouldPullToRefresh = false

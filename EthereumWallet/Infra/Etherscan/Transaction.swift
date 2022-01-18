@@ -6,11 +6,11 @@ import BigInt
 class ListTransactionRequest: EtherscanRequestProtocol {
     typealias ResponseType = TransactionList
     
-    let address: String
+    let address: EthereumAddress
     let page: Int
     let limit: Int
     
-    init(address: String, page: Int, limit: Int) {
+    init(address: EthereumAddress, page: Int, limit: Int) {
         self.address = address
         self.page = page
         self.limit = limit
@@ -20,7 +20,7 @@ class ListTransactionRequest: EtherscanRequestProtocol {
         return [
             "module": "account",
             "action": "txlist",
-            "address": address,
+            "address": address.address,
             "startblock": 0,
             "endblock": 99999999,
             "page": page,

@@ -15,7 +15,7 @@ struct HomeView: View {
                     Button(action: {
                         print(viewStore.state.address)
                     }) {
-                        Text("アドレス: \n\(viewStore.state.address)")
+                        Text("アドレス: \n\(viewStore.state.address.address)")
                             .lineLimit(nil)
                     }
                     Spacer().frame(height: 20)
@@ -42,11 +42,14 @@ struct HomeView: View {
                 VStack {
                     Text("取引作成")
                     Spacer().frame(height: 10)
-                    TextFieldView(value: $valueEth, label: "取引額（Ether）", keyboardType: .decimalPad)
+                    TextFieldView(value: $valueEth, label: "取引額（Ether）", keyboardType: .emailAddress)
                     Spacer().frame(height: 10)
                     TextFieldView(value: $address, label: "宛先", keyboardType: .emailAddress)
                     Spacer().frame(height: 30)
-                    ActionButton(text: "送信", background: .primary) {}
+                    ActionButton(text: "送信", background: .primary) {
+                        print(valueEth)
+                        print(address)
+                    }
                 }
                 .padding()
                 .background(Color.black)

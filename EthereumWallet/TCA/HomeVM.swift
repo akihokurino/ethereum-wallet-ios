@@ -13,12 +13,11 @@ enum HomeVM {
                 }
 
                 state.shouldShowHUD = true
-                
+
                 let address = state.address
                 let flow = Future<String, Never> { promise in
                     let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
-                    let walletAddress = EthereumAddress(address)!
-                    let balanceWei = try! web3.eth.getBalance(address: walletAddress)
+                    let balanceWei = try! web3.eth.getBalance(address: address)
                     let balanceEther = Web3.Utils.formatToEthereumUnits(balanceWei, toUnits: .eth, decimals: 3)!
                     promise(.success(balanceEther))
                 }
@@ -39,8 +38,7 @@ enum HomeVM {
                 let address = state.address
                 let flow = Future<String, Never> { promise in
                     let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
-                    let walletAddress = EthereumAddress(address)!
-                    let balanceWei = try! web3.eth.getBalance(address: walletAddress)
+                    let balanceWei = try! web3.eth.getBalance(address: address)
                     let balanceEther = Web3.Utils.formatToEthereumUnits(balanceWei, toUnits: .eth, decimals: 3)!
                     promise(.success(balanceEther))
                 }
@@ -60,6 +58,39 @@ enum HomeVM {
             case .shouldPullToRefresh(let val):
                 state.shouldPullToRefresh = val
                 return .none
+            case .startSendTransaction(let payload):
+                state.shouldShowHUD = true
+
+                let address = state.address
+                let flow = Future<String, Never> { promise in
+                    let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
+                    let toAddress = EthereumAddress(payload.to)!
+                    let contract = web3.contract(Web3.Utils.coldWalletABI, at: toAddress, abiVersion: 2)!
+                    let amount = Web3.Utils.parseToBigUInt(payload.to, units: .eth)
+                    var options = TransactionOptions.defaultOptions
+                    options.value = amount
+                    options.from = address
+                    options.gasPrice = .automatic
+                    options.gasLimit = .automatic
+
+                    let tx = contract.write(
+                        "fallback",
+                        parameters: [AnyObject](),
+                        extraData: Data(),
+                        transactionOptions: options
+                    )!
+                    promise(.success(tx.transaction.txhash ?? ""))
+                }
+
+                return flow
+                    .subscribe(on: environment.backgroundQueue)
+                    .receive(on: environment.mainQueue)
+                    .eraseToEffect()
+                    .map(HomeVM.Action.endSendTransaction)
+            case .endSendTransaction(let txhash):
+                print("create tx: \(txhash)")
+                state.shouldShowHUD = false
+                return .none
             }
         }
     )
@@ -73,10 +104,12 @@ extension HomeVM {
         case endRefresh(String)
         case shouldShowHUD(Bool)
         case shouldPullToRefresh(Bool)
+        case startSendTransaction(SendTransactionPayload)
+        case endSendTransaction(String)
     }
 
     struct State: Equatable {
-        let address: String
+        let address: EthereumAddress
 
         var shouldShowHUD = false
         var shouldPullToRefresh = false
@@ -87,5 +120,10 @@ extension HomeVM {
     struct Environment {
         let mainQueue: AnySchedulerOf<DispatchQueue>
         let backgroundQueue: AnySchedulerOf<DispatchQueue>
+    }
+
+    struct SendTransactionPayload: Equatable {
+        let to: String
+        let value: String
     }
 }

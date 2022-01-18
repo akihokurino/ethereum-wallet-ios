@@ -24,7 +24,7 @@ enum RootVM {
                 let privateKey = DataStore.shared.getPrivateKey()!
                 let keystore = try! EthereumKeystoreV3(privateKey: privateKey)!
                 let keyData = try! JSONEncoder().encode(keystore.keystoreParams)
-                let address = keystore.addresses!.first!.address
+                let address = keystore.addresses!.first!
                 state.homeView = HomeVM.State(address: address)
                 state.historyView = HistoryVM.State(address: address)
                 return .none
