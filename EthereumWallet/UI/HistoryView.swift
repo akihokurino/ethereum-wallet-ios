@@ -7,8 +7,14 @@ struct HistoryView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             List {
-                InHistoryView()
-                OutHistoryView()
+                ForEach(viewStore.state.transactions, id: \.self) { transaction in
+                    if transaction.from == viewStore.state.address {
+                        OutHistoryView(transaction: transaction)
+                    } else {
+                        InHistoryView(transaction: transaction)
+                    }
+                }
+                
             }
             .listStyle(PlainListStyle())
             .navigationBarTitle("履歴", displayMode: .inline)
@@ -36,27 +42,29 @@ struct HistoryView: View {
 }
 
 struct InHistoryView: View {
+    let transaction: Transaction
+
     var body: some View {
         HStack(alignment: .bottom) {
             Image(systemName: "arrow.right")
                 .resizable()
                 .frame(width: 20, height: 20, alignment: .center)
-            
+
             Spacer().frame(width: 10)
 
             VStack(alignment: .leading) {
-                Text("トランザクションハッシュ: \n0x1341048E3d37046Ca18A09EFB154Ea9771744f41")
+                Text("トランザクションハッシュ: \n\(transaction.hash)")
                     .lineLimit(nil)
                     .foregroundColor(Color.white)
                 Spacer().frame(height: 10)
-                Text("送り元: \n0x1341048E3d37046Ca18A09EFB154Ea9771744f41")
+                Text("送り元: \n\(transaction.from)")
                     .lineLimit(nil)
                     .foregroundColor(Color.white)
                 Spacer().frame(height: 10)
-                Text("総額: 100 Ether")
+                Text("総額: \(transaction.valueEth) Ether")
                     .foregroundColor(Color.white)
                 Spacer().frame(height: 10)
-                Text("日付: 2022/01/01 12:00")
+                Text("日付: \(transaction.displayDate)")
                     .foregroundColor(Color.white)
             }
             .padding()
@@ -67,27 +75,29 @@ struct InHistoryView: View {
 }
 
 struct OutHistoryView: View {
+    let transaction: Transaction
+
     var body: some View {
         HStack(alignment: .bottom) {
             VStack(alignment: .leading) {
-                Text("トランザクションハッシュ: \n0x1341048E3d37046Ca18A09EFB154Ea9771744f41")
+                Text("トランザクションハッシュ: \n\(transaction.hash)")
                     .lineLimit(nil)
                     .foregroundColor(Color.white)
                 Spacer().frame(height: 10)
-                Text("送り先: \n0x1341048E3d37046Ca18A09EFB154Ea9771744f41")
+                Text("送り先: \n\(transaction.to)")
                     .lineLimit(nil)
                     .foregroundColor(Color.white)
                 Spacer().frame(height: 10)
-                Text("総額: 100 Ether")
+                Text("総額: \(transaction.valueEth) Ether")
                     .foregroundColor(Color.white)
                 Spacer().frame(height: 10)
-                Text("日付: 2022/01/01 12:00")
+                Text("日付: \(transaction.displayDate)")
                     .foregroundColor(Color.white)
             }
             .padding()
             .background(Color(red: 219.0 / 255.0, green: 154.0 / 255.0, blue: 4.0 / 255.0))
             .cornerRadius(5.0)
-            
+
             Spacer().frame(width: 10)
 
             Image(systemName: "arrow.right")

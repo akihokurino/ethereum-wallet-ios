@@ -1,5 +1,7 @@
 import Alamofire
 import Foundation
+import web3swift
+import BigInt
 
 class ListTransactionRequest: EtherscanRequestProtocol {
     typealias ResponseType = TransactionList
@@ -45,10 +47,10 @@ struct TransactionList: Codable, Equatable {
     let result: [Transaction]
 }
 
-struct Transaction: Codable, Identifiable, Equatable {
+struct Transaction: Codable, Identifiable, Equatable, Hashable {
     let blockNumber: String
     let blockHash: String
-    let timestamp: String?
+    let timeStamp: String
     let hash: String
     let from: String
     let to: String
@@ -59,5 +61,20 @@ struct Transaction: Codable, Identifiable, Equatable {
 
     var id: String {
         return hash
+    }
+    
+    var valueEth: String {
+        return Web3.Utils.formatToEthereumUnits(BigUInt(UInt(value) ?? 0), toUnits: .eth, decimals: 3)!
+    }
+    
+    var displayDate: String {
+        guard let t = Double(timeStamp) else {
+            return ""
+        }
+        
+        let date = Date(timeIntervalSince1970: t)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd HH:mm"
+        return formatter.string(from: date)
     }
 }

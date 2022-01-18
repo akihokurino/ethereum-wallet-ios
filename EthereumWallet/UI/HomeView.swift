@@ -12,10 +12,14 @@ struct HomeView: View {
         WithViewStore(store) { viewStore in
             List {
                 VStack(alignment: .leading) {
-                    Text("アドレス: \n0x1341048E3d37046Ca18A09EFB154Ea9771744f41")
-                        .lineLimit(nil)
+                    Button(action: {
+                        print(viewStore.state.address)
+                    }) {
+                        Text("アドレス: \n\(viewStore.state.address)")
+                            .lineLimit(nil)
+                    }
                     Spacer().frame(height: 20)
-                    Text("100 Ether")
+                    Text("\(viewStore.state.balance) Ether")
                         .frame(
                             minWidth: 0,
                             maxWidth: .infinity,

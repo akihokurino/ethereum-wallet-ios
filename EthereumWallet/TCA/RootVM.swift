@@ -1,5 +1,6 @@
 import ComposableArchitecture
 import Foundation
+import web3swift
 
 enum RootVM {
     static let reducer = Reducer<State, Action, Environment>.combine(
@@ -17,9 +18,15 @@ enum RootVM {
                 HistoryVM.Environment(mainQueue: _environment.mainQueue, backgroundQueue: _environment.backgroundQueue)
             }
         ),
-        Reducer { _, action, _ in
+        Reducer { state, action, _ in
             switch action {
-            case .onAppear:
+            case .initialize:
+                let privateKey = DataStore.shared.getPrivateKey()!
+                let keystore = try! EthereumKeystoreV3(privateKey: privateKey)!
+                let keyData = try! JSONEncoder().encode(keystore.keystoreParams)
+                let address = keystore.addresses!.first!.address
+                state.homeView = HomeVM.State(address: address)
+                state.historyView = HistoryVM.State(address: address)
                 return .none
             case .homeView(let action):
                 return .none
@@ -32,15 +39,15 @@ enum RootVM {
 
 extension RootVM {
     enum Action: Equatable {
-        case onAppear
+        case initialize
 
         case homeView(HomeVM.Action)
         case historyView(HistoryVM.Action)
     }
 
     struct State: Equatable {
-        var homeView: HomeVM.State? = HomeVM.State()
-        var historyView: HistoryVM.State? = HistoryVM.State()
+        var homeView: HomeVM.State?
+        var historyView: HistoryVM.State?
     }
 
     struct Environment {

@@ -1,10 +1,11 @@
 import ComposableArchitecture
 import SwiftUI
+import web3swift
 
 @main
 struct EthereumWalletApp: App {
     @UIApplicationDelegateAdaptor private var appDelegate: AppDelegate
-
+    
     let store: Store<RootVM.State, RootVM.Action> = Store(
         initialState: RootVM.State(),
         reducer: RootVM.reducer,
@@ -23,6 +24,13 @@ struct EthereumWalletApp: App {
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        
+        let privateKey = DataStore.shared.getPrivateKey()
+        if privateKey == nil {
+            let newPrivateKey = SECP256K1.generatePrivateKey()!
+            DataStore.shared.savePrivateKey(val: newPrivateKey)
+        }
+        
         return true
     }
 }

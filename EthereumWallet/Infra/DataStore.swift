@@ -5,20 +5,20 @@ private enum UserDefaultsKey {
     static let privateKey = "private-key"
 }
 
-struct DataStoreManager {
+struct DataStore {
     let store = UserDefaults.standard
 
-    static let shared = DataStoreManager()
+    static let shared = DataStore()
     private init() {}
 
 
-    func getPrivateKey() -> String {
+    func getPrivateKey() -> Data? {
         let userDefaults = UserDefaults(suiteName: UserDefaultsKey.suiteName)!
-        return userDefaults.string(forKey: UserDefaultsKey.privateKey) ?? ""
+        return userDefaults.data(forKey: UserDefaultsKey.privateKey)
     }
 
-    func savePrivateKey(key: String) {
+    func savePrivateKey(val: Data) {
         let userDefaults = UserDefaults(suiteName: UserDefaultsKey.suiteName)!
-        userDefaults.set(key, forKey: UserDefaultsKey.privateKey)
+        userDefaults.set(val, forKey: UserDefaultsKey.privateKey)
     }
 }

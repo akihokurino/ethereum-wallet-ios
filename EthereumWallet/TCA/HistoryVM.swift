@@ -1,6 +1,7 @@
 import Combine
 import ComposableArchitecture
 import Foundation
+import web3swift
 
 enum HistoryVM {
     static let reducer = Reducer<State, Action, Environment>.combine(
@@ -13,9 +14,10 @@ enum HistoryVM {
 
                     state.shouldShowHUD = true
 
+                    let address = state.address
                     return EtherscanClient.publish(
                         ListTransactionRequest(
-                            address: "0x1341048E3d37046Ca18A09EFB154Ea9771744f41",
+                            address: address,
                             page: 1,
                             limit: 10000
                         )
@@ -37,9 +39,10 @@ enum HistoryVM {
                 case .startRefresh:
                     state.shouldPullToRefresh = true
 
+                    let address = state.address
                     return EtherscanClient.publish(
                         ListTransactionRequest(
-                            address: "0x1341048E3d37046Ca18A09EFB154Ea9771744f41",
+                            address: address,
                             page: 1,
                             limit: 10000
                         )
@@ -78,6 +81,8 @@ extension HistoryVM {
     }
 
     struct State: Equatable {
+        let address: String
+
         var shouldShowHUD = false
         var shouldPullToRefresh = false
         var isInitialized = false
