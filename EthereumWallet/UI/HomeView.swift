@@ -49,6 +49,7 @@ struct HomeView: View {
                     ActionButton(text: "送信", background: .primary) {
                         print(valueEth)
                         print(address)
+                        viewStore.send(.startSendTransaction(HomeVM.SendTransactionPayload(to: "0x8648497f7e57a0857e47ef5c1371ff24908a56ae", value: "0.02")))
                     }
                 }
                 .padding()

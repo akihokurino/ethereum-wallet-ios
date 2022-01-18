@@ -15,41 +15,57 @@ enum HomeVM {
                 state.shouldShowHUD = true
 
                 let address = state.address
-                let flow = Future<String, Never> { promise in
-                    let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
-                    let balanceWei = try! web3.eth.getBalance(address: address)
-                    let balanceEther = Web3.Utils.formatToEthereumUnits(balanceWei, toUnits: .eth, decimals: 3)!
-                    promise(.success(balanceEther))
+                let flow = Future<String, AppError> { promise in
+                    let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!, network: Networks.Custom(networkID: "10"))!)
+
+                    do {
+                        let balanceWei = try web3.eth.getBalance(address: address)
+                        let balanceEther = Web3.Utils.formatToEthereumUnits(balanceWei, toUnits: .eth, decimals: 3)!
+                        promise(.success(balanceEther))
+                    } catch {
+                        promise(.failure(AppError.plain(error.localizedDescription)))
+                    }
                 }
 
                 return flow
                     .subscribe(on: environment.backgroundQueue)
                     .receive(on: environment.mainQueue)
-                    .eraseToEffect()
+                    .catchToEffect()
                     .map(HomeVM.Action.endInitialize)
-            case .endInitialize(let balance):
+            case .endInitialize(.success(let balance)):
                 state.balance = balance
                 state.isInitialized = true
+                state.shouldShowHUD = false
+                return .none
+            case .endInitialize(.failure(_)):
                 state.shouldShowHUD = false
                 return .none
             case .startRefresh:
                 state.shouldPullToRefresh = true
 
                 let address = state.address
-                let flow = Future<String, Never> { promise in
-                    let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
-                    let balanceWei = try! web3.eth.getBalance(address: address)
-                    let balanceEther = Web3.Utils.formatToEthereumUnits(balanceWei, toUnits: .eth, decimals: 3)!
-                    promise(.success(balanceEther))
+                let flow = Future<String, AppError> { promise in
+                    let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!, network: Networks.Custom(networkID: "10"))!)
+
+                    do {
+                        let balanceWei = try web3.eth.getBalance(address: address)
+                        let balanceEther = Web3.Utils.formatToEthereumUnits(balanceWei, toUnits: .eth, decimals: 3)!
+                        promise(.success(balanceEther))
+                    } catch {
+                        promise(.failure(AppError.plain(error.localizedDescription)))
+                    }
                 }
 
                 return flow
                     .subscribe(on: environment.backgroundQueue)
                     .receive(on: environment.mainQueue)
-                    .eraseToEffect()
+                    .catchToEffect()
                     .map(HomeVM.Action.endRefresh)
-            case .endRefresh(let balance):
+            case .endRefresh(.success(let balance)):
                 state.balance = balance
+                state.shouldPullToRefresh = false
+                return .none
+            case .endRefresh(.failure(_)):
                 state.shouldPullToRefresh = false
                 return .none
             case .shouldShowHUD(let val):
@@ -62,33 +78,54 @@ enum HomeVM {
                 state.shouldShowHUD = true
 
                 let address = state.address
-                let flow = Future<String, Never> { promise in
-                    let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
+                let flow = Future<String, AppError> { promise in
+                    let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!, network: Networks.Custom(networkID: "10"))!)
                     let toAddress = EthereumAddress(payload.to)!
-                    let contract = web3.contract(Web3.Utils.coldWalletABI, at: toAddress, abiVersion: 2)!
-                    let amount = Web3.Utils.parseToBigUInt(payload.to, units: .eth)
+//                    let contract = web3.contract(Web3.Utils.coldWalletABI, at: toAddress, abiVersion: 2)!
+                    let amount = Web3.Utils.parseToBigUInt(payload.value, units: .eth)!
                     var options = TransactionOptions.defaultOptions
                     options.value = amount
                     options.from = address
+                    options.to = toAddress
                     options.gasPrice = .automatic
                     options.gasLimit = .automatic
 
-                    let tx = contract.write(
-                        "fallback",
-                        parameters: [AnyObject](),
-                        extraData: Data(),
-                        transactionOptions: options
-                    )!
-                    promise(.success(tx.transaction.txhash ?? ""))
+                    do {
+//                        let transaction = contract.write(
+//                            "fallback",
+//                            parameters: [AnyObject](),
+//                            extraData: Data(),
+//                            transactionOptions: options
+//                        )!
+                        let transaction = web3.eth.sendETH(
+                            from: address,
+                            to: toAddress,
+                            amount: payload.value,
+                            units: .eth,
+                            extraData: Data(),
+                            transactionOptions: options)!
+                        let result = try transaction.send()
+                        
+//                        let transaction = EthereumTransaction(to: toAddress, data: Data(), options: options)
+//                        let result = try web3.eth.sendTransaction(transaction, transactionOptions: options)
+                        
+                        promise(.success(result.transaction.txhash ?? ""))
+                    } catch {
+                        print("send tx error: \(error)")
+                        promise(.failure(AppError.plain(error.localizedDescription)))
+                    }
                 }
 
                 return flow
                     .subscribe(on: environment.backgroundQueue)
                     .receive(on: environment.mainQueue)
-                    .eraseToEffect()
+                    .catchToEffect()
                     .map(HomeVM.Action.endSendTransaction)
-            case .endSendTransaction(let txhash):
+            case .endSendTransaction(.success(let txhash)):
                 print("create tx: \(txhash)")
+                state.shouldShowHUD = false
+                return .none
+            case .endSendTransaction(.failure(_)):
                 state.shouldShowHUD = false
                 return .none
             }
@@ -99,13 +136,13 @@ enum HomeVM {
 extension HomeVM {
     enum Action: Equatable {
         case startInitialize
-        case endInitialize(String)
+        case endInitialize(Result<String, AppError>)
         case startRefresh
-        case endRefresh(String)
+        case endRefresh(Result<String, AppError>)
         case shouldShowHUD(Bool)
         case shouldPullToRefresh(Bool)
         case startSendTransaction(SendTransactionPayload)
-        case endSendTransaction(String)
+        case endSendTransaction(Result<String, AppError>)
     }
 
     struct State: Equatable {
