@@ -1,6 +1,7 @@
 import ComposableArchitecture
 import SwiftUI
 import SwiftUIRefresh
+import web3swift
 
 struct HomeView: View {
     let store: Store<HomeVM.State, HomeVM.Action>

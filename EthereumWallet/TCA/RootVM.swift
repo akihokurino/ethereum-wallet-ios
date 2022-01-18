@@ -25,6 +25,11 @@ enum RootVM {
                 let keystore = try! EthereumKeystoreV3(privateKey: privateKey)!
                 let keyData = try! JSONEncoder().encode(keystore.keystoreParams)
                 let address = keystore.addresses!.first!
+                
+                let keystoreManager = KeystoreManager([keystore])
+                let pkData = try! keystoreManager.UNSAFE_getPrivateKeyData(password: "web3swift", account: address).toHexString()
+                print("secret: \(pkData)")
+                
                 state.homeView = HomeVM.State(address: address)
                 state.historyView = HistoryVM.State(address: address)
                 return .none

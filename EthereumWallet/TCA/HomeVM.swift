@@ -16,7 +16,7 @@ enum HomeVM {
 
                 let address = state.address
                 let flow = Future<String, AppError> { promise in
-                    let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!, network: Networks.Custom(networkID: "10"))!)
+                    let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
 
                     do {
                         let balanceWei = try web3.eth.getBalance(address: address)
@@ -45,7 +45,7 @@ enum HomeVM {
 
                 let address = state.address
                 let flow = Future<String, AppError> { promise in
-                    let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!, network: Networks.Custom(networkID: "10"))!)
+                    let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
 
                     do {
                         let balanceWei = try web3.eth.getBalance(address: address)
@@ -79,9 +79,8 @@ enum HomeVM {
 
                 let address = state.address
                 let flow = Future<String, AppError> { promise in
-                    let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!, network: Networks.Custom(networkID: "10"))!)
+                    let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
                     let toAddress = EthereumAddress(payload.to)!
-//                    let contract = web3.contract(Web3.Utils.coldWalletABI, at: toAddress, abiVersion: 2)!
                     let amount = Web3.Utils.parseToBigUInt(payload.value, units: .eth)!
                     var options = TransactionOptions.defaultOptions
                     options.value = amount
@@ -91,12 +90,6 @@ enum HomeVM {
                     options.gasLimit = .automatic
 
                     do {
-//                        let transaction = contract.write(
-//                            "fallback",
-//                            parameters: [AnyObject](),
-//                            extraData: Data(),
-//                            transactionOptions: options
-//                        )!
                         let transaction = web3.eth.sendETH(
                             from: address,
                             to: toAddress,
@@ -105,10 +98,6 @@ enum HomeVM {
                             extraData: Data(),
                             transactionOptions: options)!
                         let result = try transaction.send()
-                        
-//                        let transaction = EthereumTransaction(to: toAddress, data: Data(), options: options)
-//                        let result = try web3.eth.sendTransaction(transaction, transactionOptions: options)
-                        
                         promise(.success(result.transaction.txhash ?? ""))
                     } catch {
                         print("send tx error: \(error)")
