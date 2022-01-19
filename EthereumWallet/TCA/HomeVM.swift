@@ -80,12 +80,17 @@ enum HomeVM {
                 if valueEth.isEmpty || to.isEmpty {
                     return .none
                 }
-                
+
                 state.shouldShowHUD = true
 
                 let address = state.address
                 let flow = Future<String, AppError> { promise in
                     let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
+                    let privateKey = DataStore.shared.getPrivateKey()!
+                    let keystore = try! EthereumKeystoreV3(privateKey: privateKey)!
+                    let keystoreManager = KeystoreManager([keystore])
+                    web3.addKeystoreManager(keystoreManager)
+
                     let toAddress = EthereumAddress(to)!
                     let amount = Web3.Utils.parseToBigUInt(valueEth, units: .eth)!
                     var options = TransactionOptions.defaultOptions
@@ -102,7 +107,8 @@ enum HomeVM {
                             amount: valueEth,
                             units: .eth,
                             extraData: Data(),
-                            transactionOptions: options)!
+                            transactionOptions: options
+                        )!
                         let result = try transaction.send()
                         promise(.success(result.transaction.txhash ?? ""))
                     } catch {
@@ -157,7 +163,7 @@ extension HomeVM {
         var shouldPullToRefresh = false
         var isInitialized = false
         var balance = ""
-        
+
         var inputValueEth = ""
         var inputToAddress = ""
     }

@@ -77,4 +77,8 @@ struct Transaction: Codable, Identifiable, Equatable, Hashable {
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
         return formatter.string(from: date)
     }
+    
+    func isMine(address: EthereumAddress) -> Bool {
+        return address.address == EthereumAddress(from)!.address
+    }
 }

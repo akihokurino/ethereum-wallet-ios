@@ -8,7 +8,7 @@ struct HistoryView: View {
         WithViewStore(store) { viewStore in
             List {
                 ForEach(viewStore.state.transactions, id: \.self) { transaction in
-                    if transaction.from == viewStore.state.address.address {
+                    if transaction.isMine(address: viewStore.state.address) {
                         OutHistoryView(transaction: transaction)
                     } else {
                         InHistoryView(transaction: transaction)
