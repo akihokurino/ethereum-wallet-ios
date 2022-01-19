@@ -74,14 +74,20 @@ enum HomeVM {
             case .shouldPullToRefresh(let val):
                 state.shouldPullToRefresh = val
                 return .none
-            case .startSendTransaction(let payload):
+            case .startSendTransaction:
+                let valueEth = state.inputValueEth
+                let to = state.inputToAddress
+                if valueEth.isEmpty || to.isEmpty {
+                    return .none
+                }
+                
                 state.shouldShowHUD = true
 
                 let address = state.address
                 let flow = Future<String, AppError> { promise in
                     let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
-                    let toAddress = EthereumAddress(payload.to)!
-                    let amount = Web3.Utils.parseToBigUInt(payload.value, units: .eth)!
+                    let toAddress = EthereumAddress(to)!
+                    let amount = Web3.Utils.parseToBigUInt(valueEth, units: .eth)!
                     var options = TransactionOptions.defaultOptions
                     options.value = amount
                     options.from = address
@@ -93,7 +99,7 @@ enum HomeVM {
                         let transaction = web3.eth.sendETH(
                             from: address,
                             to: toAddress,
-                            amount: payload.value,
+                            amount: valueEth,
                             units: .eth,
                             extraData: Data(),
                             transactionOptions: options)!
@@ -112,10 +118,18 @@ enum HomeVM {
                     .map(HomeVM.Action.endSendTransaction)
             case .endSendTransaction(.success(let txhash)):
                 print("create tx: \(txhash)")
+                state.inputValueEth = ""
+                state.inputToAddress = ""
                 state.shouldShowHUD = false
                 return .none
             case .endSendTransaction(.failure(_)):
                 state.shouldShowHUD = false
+                return .none
+            case .inputValueEth(let val):
+                state.inputValueEth = val
+                return .none
+            case .inputToAddress(let val):
+                state.inputToAddress = val
                 return .none
             }
         }
@@ -130,8 +144,10 @@ extension HomeVM {
         case endRefresh(Result<String, AppError>)
         case shouldShowHUD(Bool)
         case shouldPullToRefresh(Bool)
-        case startSendTransaction(SendTransactionPayload)
+        case startSendTransaction
         case endSendTransaction(Result<String, AppError>)
+        case inputValueEth(String)
+        case inputToAddress(String)
     }
 
     struct State: Equatable {
@@ -141,15 +157,13 @@ extension HomeVM {
         var shouldPullToRefresh = false
         var isInitialized = false
         var balance = ""
+        
+        var inputValueEth = ""
+        var inputToAddress = ""
     }
 
     struct Environment {
         let mainQueue: AnySchedulerOf<DispatchQueue>
         let backgroundQueue: AnySchedulerOf<DispatchQueue>
-    }
-
-    struct SendTransactionPayload: Equatable {
-        let to: String
-        let value: String
     }
 }

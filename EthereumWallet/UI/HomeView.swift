@@ -6,9 +6,6 @@ import web3swift
 struct HomeView: View {
     let store: Store<HomeVM.State, HomeVM.Action>
 
-    @State private var valueEth: String = ""
-    @State private var address: String = ""
-
     var body: some View {
         WithViewStore(store) { viewStore in
             List {
@@ -43,15 +40,18 @@ struct HomeView: View {
                 VStack {
                     Text("取引作成")
                     Spacer().frame(height: 10)
-                    TextFieldView(value: $valueEth, label: "取引額（Ether）", keyboardType: .decimalPad)
+                    TextFieldView(value: viewStore.binding(
+                        get: \.inputValueEth,
+                        send: HomeVM.Action.inputValueEth
+                    ), label: "取引額（Ether）", keyboardType: .decimalPad)
                     Spacer().frame(height: 10)
-                    TextFieldView(value: $address, label: "宛先", keyboardType: .emailAddress)
+                    TextFieldView(value: viewStore.binding(
+                        get: \.inputToAddress,
+                        send: HomeVM.Action.inputToAddress
+                    ), label: "宛先", keyboardType: .emailAddress)
                     Spacer().frame(height: 30)
                     ActionButton(text: "送信", background: .primary) {
-                        if valueEth.isEmpty || address.isEmpty {
-                            return
-                        }
-                        viewStore.send(.startSendTransaction(HomeVM.SendTransactionPayload(to: address, value: valueEth)))
+                        viewStore.send(.startSendTransaction)
                     }
                 }
                 .padding()
