@@ -43,14 +43,15 @@ struct HomeView: View {
                 VStack {
                     Text("取引作成")
                     Spacer().frame(height: 10)
-                    TextFieldView(value: $valueEth, label: "取引額（Ether）", keyboardType: .emailAddress)
+                    TextFieldView(value: $valueEth, label: "取引額（Ether）", keyboardType: .decimalPad)
                     Spacer().frame(height: 10)
                     TextFieldView(value: $address, label: "宛先", keyboardType: .emailAddress)
                     Spacer().frame(height: 30)
                     ActionButton(text: "送信", background: .primary) {
-                        print(valueEth)
-                        print(address)
-                        viewStore.send(.startSendTransaction(HomeVM.SendTransactionPayload(to: "0x8648497f7e57a0857e47ef5c1371ff24908a56ae", value: "0.02")))
+                        if valueEth.isEmpty || address.isEmpty {
+                            return
+                        }
+                        viewStore.send(.startSendTransaction(HomeVM.SendTransactionPayload(to: address, value: valueEth)))
                     }
                 }
                 .padding()
