@@ -26,6 +26,22 @@ struct RootView: View {
                 NavigationView {
                     IfLetStore(
                         store.scope(
+                            state: { $0.selectTokenView },
+                            action: RootVM.Action.selectTokenView
+                        ),
+                        then: SelectTokenView.init(store:)
+                    )
+                }
+                .tabItem {
+                    VStack {
+                        Image(systemName: "folder")
+                        Text("トークン")
+                    }
+                }.tag(2)
+
+                NavigationView {
+                    IfLetStore(
+                        store.scope(
                             state: { $0.historyView },
                             action: RootVM.Action.historyView
                         ),
@@ -37,7 +53,7 @@ struct RootView: View {
                         Image(systemName: "clock")
                         Text("履歴")
                     }
-                }.tag(2)
+                }.tag(3)
             }
             .onAppear {
                 viewStore.send(.initialize)

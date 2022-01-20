@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		022748BD27990A2A0066B557 /* Navigation+TCA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 022748BC27990A2A0066B557 /* Navigation+TCA.swift */; };
+		024E2B05279901CA003A9B55 /* SelectTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024E2B04279901CA003A9B55 /* SelectTokenView.swift */; };
+		024E2B08279901F0003A9B55 /* CustomTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024E2B07279901F0003A9B55 /* CustomTokenView.swift */; };
+		024E2B0A27990218003A9B55 /* SelectTokenVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024E2B0927990218003A9B55 /* SelectTokenVM.swift */; };
+		024E2B0C2799022A003A9B55 /* CustomTokenVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024E2B0B2799022A003A9B55 /* CustomTokenVM.swift */; };
 		0280DA7E279670390087E62F /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0280DA7D279670390087E62F /* Button.swift */; };
 		0280DA80279670850087E62F /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0280DA7F279670850087E62F /* TextField.swift */; };
 		02A0B2BB2795660F00AE925C /* EthereumWalletApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A0B2BA2795660F00AE925C /* EthereumWalletApp.swift */; };
@@ -32,6 +37,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		022748BC27990A2A0066B557 /* Navigation+TCA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Navigation+TCA.swift"; sourceTree = "<group>"; };
+		024E2B04279901CA003A9B55 /* SelectTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTokenView.swift; sourceTree = "<group>"; };
+		024E2B07279901F0003A9B55 /* CustomTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTokenView.swift; sourceTree = "<group>"; };
+		024E2B0927990218003A9B55 /* SelectTokenVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTokenVM.swift; sourceTree = "<group>"; };
+		024E2B0B2799022A003A9B55 /* CustomTokenVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTokenVM.swift; sourceTree = "<group>"; };
 		0280DA7D279670390087E62F /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		0280DA7F279670850087E62F /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		02A0B2B72795660F00AE925C /* EthereumWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EthereumWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -68,6 +78,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		024E2B06279901DB003A9B55 /* ERC20 */ = {
+			isa = PBXGroup;
+			children = (
+				024E2B07279901F0003A9B55 /* CustomTokenView.swift */,
+			);
+			path = ERC20;
+			sourceTree = "<group>";
+		};
 		02A0B2AE2795660F00AE925C = {
 			isa = PBXGroup;
 			children = (
@@ -110,8 +128,10 @@
 			isa = PBXGroup;
 			children = (
 				02DE565A279574BD00E28F40 /* Component */,
+				024E2B06279901DB003A9B55 /* ERC20 */,
 				02A0B2BC2795660F00AE925C /* RootView.swift */,
 				02DE56452795670F00E28F40 /* HomeView.swift */,
+				024E2B04279901CA003A9B55 /* SelectTokenView.swift */,
 				02DE56432795670400E28F40 /* HistoryView.swift */,
 			);
 			path = UI;
@@ -120,10 +140,13 @@
 		02DE565327956B3E00E28F40 /* TCA */ = {
 			isa = PBXGroup;
 			children = (
+				022748BC27990A2A0066B557 /* Navigation+TCA.swift */,
 				02DE566D2795821F00E28F40 /* Error.swift */,
 				02DE565427956B5E00E28F40 /* RootVM.swift */,
 				02DE565627956B6F00E28F40 /* HomeVM.swift */,
+				024E2B0927990218003A9B55 /* SelectTokenVM.swift */,
 				02DE565827956B7D00E28F40 /* HistoryVM.swift */,
+				024E2B0B2799022A003A9B55 /* CustomTokenVM.swift */,
 			);
 			path = TCA;
 			sourceTree = "<group>";
@@ -265,15 +288,20 @@
 				02A0B2BD2795660F00AE925C /* RootView.swift in Sources */,
 				02DE56442795670400E28F40 /* HistoryView.swift in Sources */,
 				02DE566A27957FFB00E28F40 /* Transaction.swift in Sources */,
+				022748BD27990A2A0066B557 /* Navigation+TCA.swift in Sources */,
 				0280DA80279670850087E62F /* TextField.swift in Sources */,
 				02DE56462795670F00E28F40 /* HomeView.swift in Sources */,
+				024E2B08279901F0003A9B55 /* CustomTokenView.swift in Sources */,
 				02DE56622795796000E28F40 /* DataStore.swift in Sources */,
 				02DE565927956B7D00E28F40 /* HistoryVM.swift in Sources */,
 				02DE565727956B6F00E28F40 /* HomeVM.swift in Sources */,
 				0280DA7E279670390087E62F /* Button.swift in Sources */,
+				024E2B0A27990218003A9B55 /* SelectTokenVM.swift in Sources */,
 				02DE566C2795806D00E28F40 /* Client.swift in Sources */,
 				02DE565C279574CF00E28F40 /* HUD.swift in Sources */,
 				02A0B2BB2795660F00AE925C /* EthereumWalletApp.swift in Sources */,
+				024E2B0C2799022A003A9B55 /* CustomTokenVM.swift in Sources */,
+				024E2B05279901CA003A9B55 /* SelectTokenView.swift in Sources */,
 				02DE565527956B5E00E28F40 /* RootVM.swift in Sources */,
 				02DE566E2795821F00E28F40 /* Error.swift in Sources */,
 				02DE566527957EC100E28F40 /* Environment.swift in Sources */,
