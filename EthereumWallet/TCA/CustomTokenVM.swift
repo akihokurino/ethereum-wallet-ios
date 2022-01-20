@@ -19,20 +19,22 @@ enum CustomTokenVM {
 
                 let address = state.address
                 let flow = Future<String, AppError> { promise in
-                    let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
-                    let contract = web3.contract(Web3.Utils.erc20ABI, at: EthereumAddress(customTokenAddress)!, abiVersion: 2)!
-                    var options = TransactionOptions.defaultOptions
+                    DispatchQueue.global(qos: .background).async {
+                        let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
+                        let contract = web3.contract(Web3.Utils.erc20ABI, at: EthereumAddress(customTokenAddress)!, abiVersion: 2)!
+                        var options = TransactionOptions.defaultOptions
 
-                    do {
-                        let result = try contract.read(
-                            "balanceOf",
-                            parameters: [address] as [AnyObject],
-                            extraData: Data(),
-                            transactionOptions: options)!.call()
-                        let balance = result["0"] as! BigUInt
-                        promise(.success(String(balance)))
-                    } catch {
-                        promise(.failure(AppError.plain(error.localizedDescription)))
+                        do {
+                            let result = try contract.read(
+                                "balanceOf",
+                                parameters: [address] as [AnyObject],
+                                extraData: Data(),
+                                transactionOptions: options)!.call()
+                            let balance = result["0"] as! BigUInt
+                            promise(.success(String(balance)))
+                        } catch {
+                            promise(.failure(AppError.plain(error.localizedDescription)))
+                        }
                     }
                 }
 
@@ -54,20 +56,22 @@ enum CustomTokenVM {
 
                 let address = state.address
                 let flow = Future<String, AppError> { promise in
-                    let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
-                    let contract = web3.contract(Web3.Utils.erc20ABI, at: EthereumAddress(customTokenAddress)!, abiVersion: 2)!
-                    var options = TransactionOptions.defaultOptions
+                    DispatchQueue.global(qos: .background).async {
+                        let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
+                        let contract = web3.contract(Web3.Utils.erc20ABI, at: EthereumAddress(customTokenAddress)!, abiVersion: 2)!
+                        var options = TransactionOptions.defaultOptions
 
-                    do {
-                        let result = try contract.read(
-                            "balanceOf",
-                            parameters: [address] as [AnyObject],
-                            extraData: Data(),
-                            transactionOptions: options)!.call()
-                        let balance = result["0"] as! BigUInt
-                        promise(.success(String(balance)))
-                    } catch {
-                        promise(.failure(AppError.plain(error.localizedDescription)))
+                        do {
+                            let result = try contract.read(
+                                "balanceOf",
+                                parameters: [address] as [AnyObject],
+                                extraData: Data(),
+                                transactionOptions: options)!.call()
+                            let balance = result["0"] as! BigUInt
+                            promise(.success(String(balance)))
+                        } catch {
+                            promise(.failure(AppError.plain(error.localizedDescription)))
+                        }
                     }
                 }
 
@@ -100,32 +104,32 @@ enum CustomTokenVM {
 
                 let address = state.address
                 let flow = Future<String, AppError> { promise in
-                    let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
-                    let privateKey = DataStore.shared.getPrivateKey()!
-                    let keystore = try! EthereumKeystoreV3(privateKey: privateKey)!
-                    let keystoreManager = KeystoreManager([keystore])
-                    web3.addKeystoreManager(keystoreManager)
+                    DispatchQueue.global(qos: .background).async {
+                        let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
+                        let privateKey = DataStore.shared.getPrivateKey()!
+                        let keystore = try! EthereumKeystoreV3(privateKey: privateKey)!
+                        let keystoreManager = KeystoreManager([keystore])
+                        web3.addKeystoreManager(keystoreManager)
 
-                    let toAddress = EthereumAddress(to)!
-                    let contract = web3.contract(Web3.Utils.erc20ABI, at: EthereumAddress(customTokenAddress)!, abiVersion: 2)!
-                    let amount = Web3.Utils.parseToBigUInt(valueCMTN, decimals: 0)!
-                    var options = TransactionOptions.defaultOptions
-                    options.value = amount
-                    options.from = address
-                    options.to = toAddress
-                    options.gasLimit = .automatic
-                    options.gasPrice = .automatic
+                        let toAddress = EthereumAddress(to)!
+                        let contract = web3.contract(Web3.Utils.erc20ABI, at: EthereumAddress(customTokenAddress)!, abiVersion: 2)!
+                        let amount = Web3.Utils.parseToBigUInt(valueCMTN, decimals: 0)!
+                        var options = TransactionOptions.defaultOptions
+                        options.from = address
+                        options.gasLimit = .manual(BigUInt(5500000))
+                        options.gasPrice = .manual(BigUInt(35000000000))
 
-                    do {
-                        let result = try contract.write(
-                            "transfer",
-                            parameters: [toAddress, amount] as [AnyObject],
-                            extraData: Data(),
-                            transactionOptions: options)!.send()
-                        promise(.success(result.transaction.txhash ?? ""))
-                    } catch {
-                        print("send tx error: \(error)")
-                        promise(.failure(AppError.plain(error.localizedDescription)))
+                        do {
+                            let result = try contract.write(
+                                "transfer",
+                                parameters: [toAddress, amount] as [AnyObject],
+                                extraData: Data(),
+                                transactionOptions: options)!.send()
+                            promise(.success(result.transaction.txhash ?? ""))
+                        } catch {
+                            print("send tx error: \(error)")
+                            promise(.failure(AppError.plain(error.localizedDescription)))
+                        }
                     }
                 }
 

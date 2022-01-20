@@ -47,6 +47,8 @@ extension EtherscanRequestProtocol {
         if let params = parameters {
             urlRequest = try encoding.encode(urlRequest, with: params)
         }
+        
+        print(urlRequest.url!)
     
         return urlRequest
     }

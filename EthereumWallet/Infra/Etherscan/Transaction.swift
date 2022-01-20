@@ -1,7 +1,7 @@
 import Alamofire
+import BigInt
 import Foundation
 import web3swift
-import BigInt
 
 class ListTransactionRequest: EtherscanRequestProtocol {
     typealias ResponseType = TransactionList
@@ -58,6 +58,7 @@ struct Transaction: Codable, Identifiable, Equatable, Hashable {
     let gas: String
     let gasPrice: String
     let gasUsed: String
+    let isError: String
 
     var id: String {
         return hash
@@ -65,6 +66,10 @@ struct Transaction: Codable, Identifiable, Equatable, Hashable {
     
     var valueEth: String {
         return Web3.Utils.formatToEthereumUnits(BigUInt(UInt(value) ?? 0), toUnits: .eth, decimals: 3)!
+    }
+    
+    var error: Bool {
+        return isError == "1"
     }
     
     var displayDate: String {
@@ -80,5 +85,9 @@ struct Transaction: Codable, Identifiable, Equatable, Hashable {
     
     func isMine(address: EthereumAddress) -> Bool {
         return address.address == EthereumAddress(from)!.address
+    }
+    
+    func isContract() -> Bool {
+        return EthereumAddress(customTokenAddress)!.address == EthereumAddress(to)!.address
     }
 }

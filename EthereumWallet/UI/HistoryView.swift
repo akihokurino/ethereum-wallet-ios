@@ -14,7 +14,6 @@ struct HistoryView: View {
                         InHistoryView(transaction: transaction)
                     }
                 }
-                
             }
             .listStyle(PlainListStyle())
             .navigationBarTitle("履歴", displayMode: .inline)
@@ -57,18 +56,24 @@ struct InHistoryView: View {
                     .lineLimit(nil)
                     .foregroundColor(Color.white)
                 Spacer().frame(height: 10)
-                Text("送り元: \n\(transaction.from)")
-                    .lineLimit(nil)
-                    .foregroundColor(Color.white)
-                Spacer().frame(height: 10)
-                Text("総額: \(transaction.valueEth) Ether")
-                    .foregroundColor(Color.white)
-                Spacer().frame(height: 10)
+                if transaction.isContract() {
+                    Text("コントラクト呼び出し")
+                        .foregroundColor(Color.white)
+                    Spacer().frame(height: 10)
+                } else {
+                    Text("送り元: \n\(transaction.from)")
+                        .lineLimit(nil)
+                        .foregroundColor(Color.white)
+                    Spacer().frame(height: 10)
+                    Text("総額: \(transaction.valueEth) Ether")
+                        .foregroundColor(Color.white)
+                    Spacer().frame(height: 10)
+                }
                 Text("日付: \(transaction.displayDate)")
                     .foregroundColor(Color.white)
             }
             .padding()
-            .background(Color(red: 0, green: 201.0 / 255.0, blue: 167.0 / 255.0))
+            .background(transaction.error ? Color.red : Color(red: 0, green: 201.0 / 255.0, blue: 167.0 / 255.0))
             .cornerRadius(5.0)
         }
     }
@@ -84,18 +89,24 @@ struct OutHistoryView: View {
                     .lineLimit(nil)
                     .foregroundColor(Color.white)
                 Spacer().frame(height: 10)
-                Text("送り先: \n\(transaction.to)")
-                    .lineLimit(nil)
-                    .foregroundColor(Color.white)
-                Spacer().frame(height: 10)
-                Text("総額: \(transaction.valueEth) Ether")
-                    .foregroundColor(Color.white)
-                Spacer().frame(height: 10)
+                if transaction.isContract() {
+                    Text("コントラクト呼び出し")
+                        .foregroundColor(Color.white)
+                    Spacer().frame(height: 10)
+                } else {
+                    Text("送り先: \n\(transaction.to)")
+                        .lineLimit(nil)
+                        .foregroundColor(Color.white)
+                    Spacer().frame(height: 10)
+                    Text("総額: \(transaction.valueEth) Ether")
+                        .foregroundColor(Color.white)
+                    Spacer().frame(height: 10)
+                }
                 Text("日付: \(transaction.displayDate)")
                     .foregroundColor(Color.white)
             }
             .padding()
-            .background(Color(red: 219.0 / 255.0, green: 154.0 / 255.0, blue: 4.0 / 255.0))
+            .background(transaction.error ? Color.red : Color(red: 219.0 / 255.0, green: 154.0 / 255.0, blue: 4.0 / 255.0))
             .cornerRadius(5.0)
 
             Spacer().frame(width: 10)

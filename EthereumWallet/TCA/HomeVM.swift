@@ -15,14 +15,16 @@ enum HomeVM {
 
             let address = state.address
             let flow = Future<String, AppError> { promise in
-                let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
+                DispatchQueue.global(qos: .background).async {
+                    let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
 
-                do {
-                    let balanceWei = try web3.eth.getBalance(address: address)
-                    let balanceEther = Web3.Utils.formatToEthereumUnits(balanceWei, toUnits: .eth, decimals: 3)!
-                    promise(.success(balanceEther))
-                } catch {
-                    promise(.failure(AppError.plain(error.localizedDescription)))
+                    do {
+                        let balanceWei = try web3.eth.getBalance(address: address)
+                        let balanceEther = Web3.Utils.formatToEthereumUnits(balanceWei, toUnits: .eth, decimals: 3)!
+                        promise(.success(balanceEther))
+                    } catch {
+                        promise(.failure(AppError.plain(error.localizedDescription)))
+                    }
                 }
             }
 
@@ -44,14 +46,16 @@ enum HomeVM {
 
             let address = state.address
             let flow = Future<String, AppError> { promise in
-                let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
+                DispatchQueue.global(qos: .background).async {
+                    let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
 
-                do {
-                    let balanceWei = try web3.eth.getBalance(address: address)
-                    let balanceEther = Web3.Utils.formatToEthereumUnits(balanceWei, toUnits: .eth, decimals: 3)!
-                    promise(.success(balanceEther))
-                } catch {
-                    promise(.failure(AppError.plain(error.localizedDescription)))
+                    do {
+                        let balanceWei = try web3.eth.getBalance(address: address)
+                        let balanceEther = Web3.Utils.formatToEthereumUnits(balanceWei, toUnits: .eth, decimals: 3)!
+                        promise(.success(balanceEther))
+                    } catch {
+                        promise(.failure(AppError.plain(error.localizedDescription)))
+                    }
                 }
             }
 
@@ -84,36 +88,38 @@ enum HomeVM {
 
             let address = state.address
             let flow = Future<String, AppError> { promise in
-                let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
-                let privateKey = DataStore.shared.getPrivateKey()!
-                let keystore = try! EthereumKeystoreV3(privateKey: privateKey)!
-                let keystoreManager = KeystoreManager([keystore])
-                web3.addKeystoreManager(keystoreManager)
+                DispatchQueue.global(qos: .background).async {
+                    let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
+                    let privateKey = DataStore.shared.getPrivateKey()!
+                    let keystore = try! EthereumKeystoreV3(privateKey: privateKey)!
+                    let keystoreManager = KeystoreManager([keystore])
+                    web3.addKeystoreManager(keystoreManager)
 
-                let toAddress = EthereumAddress(to)!
-                let amount = Web3.Utils.parseToBigUInt(valueEth, units: .eth)!
-                var options = TransactionOptions.defaultOptions
-                options.value = amount
-                options.from = address
-                options.to = toAddress
-                options.gasPrice = .automatic
-                options.gasLimit = .automatic
+                    let toAddress = EthereumAddress(to)!
+                    let amount = Web3.Utils.parseToBigUInt(valueEth, units: .eth)!
+                    var options = TransactionOptions.defaultOptions
+                    options.value = amount
+                    options.from = address
+                    options.to = toAddress
+                    options.gasPrice = .automatic
+                    options.gasLimit = .automatic
 
-                let tx = web3.eth.sendETH(
-                    from: address,
-                    to: toAddress,
-                    amount: valueEth,
-                    units: .eth,
-                    extraData: Data(),
-                    transactionOptions: options
-                )!
+                    let tx = web3.eth.sendETH(
+                        from: address,
+                        to: toAddress,
+                        amount: valueEth,
+                        units: .eth,
+                        extraData: Data(),
+                        transactionOptions: options
+                    )!
 
-                do {
-                    let result = try tx.send()
-                    promise(.success(result.transaction.txhash ?? ""))
-                } catch {
-                    print("send tx error: \(error)")
-                    promise(.failure(AppError.plain(error.localizedDescription)))
+                    do {
+                        let result = try tx.send()
+                        promise(.success(result.transaction.txhash ?? ""))
+                    } catch {
+                        print("send tx error: \(error)")
+                        promise(.failure(AppError.plain(error.localizedDescription)))
+                    }
                 }
             }
 
