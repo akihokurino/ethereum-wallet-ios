@@ -24,4 +24,4 @@
 
 ## Images
 
-<img width="300" alt="home" src="https://user-images.githubusercontent.com/2268288/150321314-d642f950-3a14-45ef-8807-4790eb694ae2.png"> <img width="300" alt="token" src="https://user-images.githubusercontent.com/2268288/150321384-f2459ffa-70e1-413b-94ea-888e51aaeb7a.png"> <img width="300" alt="history" src="https://user-images.githubusercontent.com/2268288/150321419-4244dd8d-7b0f-4a90-99c7-6b7cb52b7929.png">
+<img width="250" alt="home" src="https://user-images.githubusercontent.com/2268288/150321314-d642f950-3a14-45ef-8807-4790eb694ae2.png"> <img width="250" alt="token" src="https://user-images.githubusercontent.com/2268288/150321384-f2459ffa-70e1-413b-94ea-888e51aaeb7a.png"> <img width="250" alt="history" src="https://user-images.githubusercontent.com/2268288/150360344-bf5b9ee0-4eeb-4fa2-8127-2db93a5a6260.png">
