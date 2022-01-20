@@ -87,7 +87,7 @@ struct Transaction: Codable, Identifiable, Equatable, Hashable {
         return address.address == EthereumAddress(from)!.address
     }
     
-    func isContract() -> Bool {
+    func isSendToContract() -> Bool {
         return EthereumAddress(customTokenAddress)!.address == EthereumAddress(to)!.address
     }
 }
