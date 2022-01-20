@@ -99,16 +99,17 @@ enum HomeVM {
                 options.gasPrice = .automatic
                 options.gasLimit = .automatic
 
+                let tx = web3.eth.sendETH(
+                    from: address,
+                    to: toAddress,
+                    amount: valueEth,
+                    units: .eth,
+                    extraData: Data(),
+                    transactionOptions: options
+                )!
+
                 do {
-                    let transaction = web3.eth.sendETH(
-                        from: address,
-                        to: toAddress,
-                        amount: valueEth,
-                        units: .eth,
-                        extraData: Data(),
-                        transactionOptions: options
-                    )!
-                    let result = try transaction.send()
+                    let result = try tx.send()
                     promise(.success(result.transaction.txhash ?? ""))
                 } catch {
                     print("send tx error: \(error)")
