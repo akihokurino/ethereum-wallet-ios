@@ -1,0 +1,17 @@
+{
+  "name": "erc20-token",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@truffle/hdwallet-provider": "^2.0.0",
+    "openzeppelin-solidity": "^4.4.1",
+    "truffle": "^5.4.28",
+    "truffle-privatekey-provider": "^1.5.0"
+  }
+}
