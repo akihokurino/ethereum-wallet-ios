@@ -4,9 +4,7 @@ import ComposableArchitecture
 import Foundation
 import web3swift
 
-let customTokenAddress = "0x803c6922F39792Bd17DE55Db7eFcd7b4a206ebA4"
-
-enum CustomTokenVM {
+enum TokenVM {
     static let reducer = Reducer<State, Action, Environment>.combine(
         Reducer { state, action, environment in
             switch action {
@@ -18,10 +16,11 @@ enum CustomTokenVM {
                 state.shouldShowHUD = true
 
                 let address = state.address
+                let token = state.token
                 let flow = Future<String, AppError> { promise in
                     DispatchQueue.global(qos: .background).async {
                         let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
-                        let contract = web3.contract(Web3.Utils.erc20ABI, at: EthereumAddress(customTokenAddress)!, abiVersion: 2)!
+                        let contract = web3.contract(Web3.Utils.erc20ABI, at: token.address, abiVersion: 2)!
                         var options = TransactionOptions.defaultOptions
 
                         do {
@@ -42,7 +41,7 @@ enum CustomTokenVM {
                     .subscribe(on: environment.backgroundQueue)
                     .receive(on: environment.mainQueue)
                     .catchToEffect()
-                    .map(CustomTokenVM.Action.endInitialize)
+                    .map(TokenVM.Action.endInitialize)
             case .endInitialize(.success(let balance)):
                 state.balance = balance
                 state.isInitialized = true
@@ -55,10 +54,11 @@ enum CustomTokenVM {
                 state.shouldPullToRefresh = true
 
                 let address = state.address
+                let token = state.token
                 let flow = Future<String, AppError> { promise in
                     DispatchQueue.global(qos: .background).async {
                         let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
-                        let contract = web3.contract(Web3.Utils.erc20ABI, at: EthereumAddress(customTokenAddress)!, abiVersion: 2)!
+                        let contract = web3.contract(Web3.Utils.erc20ABI, at: token.address, abiVersion: 2)!
                         var options = TransactionOptions.defaultOptions
 
                         do {
@@ -79,7 +79,7 @@ enum CustomTokenVM {
                     .subscribe(on: environment.backgroundQueue)
                     .receive(on: environment.mainQueue)
                     .catchToEffect()
-                    .map(CustomTokenVM.Action.endRefresh)
+                    .map(TokenVM.Action.endRefresh)
             case .endRefresh(.success(let balance)):
                 state.balance = balance
                 state.shouldPullToRefresh = false
@@ -94,15 +94,16 @@ enum CustomTokenVM {
                 state.shouldPullToRefresh = val
                 return .none
             case .startSendTransaction:
-                let valueCMTN = state.inputValueCMTN
+                let amount = state.inputAmount
                 let to = state.inputToAddress
-                if valueCMTN.isEmpty || to.isEmpty {
+                if amount.isEmpty || to.isEmpty {
                     return .none
                 }
 
                 state.shouldShowHUD = true
 
                 let address = state.address
+                let token = state.token
                 let flow = Future<String, AppError> { promise in
                     DispatchQueue.global(qos: .background).async {
                         let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
@@ -112,12 +113,12 @@ enum CustomTokenVM {
                         web3.addKeystoreManager(keystoreManager)
 
                         let toAddress = EthereumAddress(to)!
-                        let contract = web3.contract(Web3.Utils.erc20ABI, at: EthereumAddress(customTokenAddress)!, abiVersion: 2)!
-                        let amount = Web3.Utils.parseToBigUInt(valueCMTN, decimals: 0)!
+                        let contract = web3.contract(Web3.Utils.erc20ABI, at: token.address, abiVersion: 2)!
+                        let amount = Web3.Utils.parseToBigUInt(amount, decimals: 0)!
                         var options = TransactionOptions.defaultOptions
                         options.from = address
-                        options.gasLimit = .manual(BigUInt(5500000))
-                        options.gasPrice = .manual(BigUInt(35000000000))
+                        options.gasPrice = .automatic
+                        options.gasLimit = .automatic
 
                         do {
                             let result = try contract.write(
@@ -137,18 +138,18 @@ enum CustomTokenVM {
                     .subscribe(on: environment.backgroundQueue)
                     .receive(on: environment.mainQueue)
                     .catchToEffect()
-                    .map(CustomTokenVM.Action.endSendTransaction)
+                    .map(TokenVM.Action.endSendTransaction)
             case .endSendTransaction(.success(let txhash)):
                 print("create tx: \(txhash)")
-                state.inputValueCMTN = ""
+                state.inputAmount = ""
                 state.inputToAddress = ""
                 state.shouldShowHUD = false
                 return .none
             case .endSendTransaction(.failure(_)):
                 state.shouldShowHUD = false
                 return .none
-            case .inputValueCMTN(let val):
-                state.inputValueCMTN = val
+            case .inputAmount(let val):
+                state.inputAmount = val
                 return .none
             case .inputToAddress(let val):
                 state.inputToAddress = val
@@ -158,7 +159,7 @@ enum CustomTokenVM {
     )
 }
 
-extension CustomTokenVM {
+extension TokenVM {
     enum Action: Equatable {
         case startInitialize
         case endInitialize(Result<String, AppError>)
@@ -168,19 +169,20 @@ extension CustomTokenVM {
         case shouldPullToRefresh(Bool)
         case startSendTransaction
         case endSendTransaction(Result<String, AppError>)
-        case inputValueCMTN(String)
+        case inputAmount(String)
         case inputToAddress(String)
     }
 
     struct State: Equatable {
         let address: EthereumAddress
+        let token: ERC20Token
 
         var shouldShowHUD = false
         var shouldPullToRefresh = false
         var isInitialized = false
         var balance = ""
 
-        var inputValueCMTN = ""
+        var inputAmount = ""
         var inputToAddress = ""
     }
 

@@ -1,26 +1,77 @@
+import Combine
 import ComposableArchitecture
 import Foundation
 import web3swift
 
 enum SelectTokenVM {
-    static let reducer = Reducer<State, Action, Environment> { state, action, _ in
+    static let reducer = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
-        case .presentCustomTokenView:
-            state.customTokenView = CustomTokenVM.State(address: state.address)
+        case .initialize:
+            let tokens = DataStore.shared.getTokens().map { ERC20Token.restore(from: $0) }
+            state.tokens = tokens
             return .none
-        case .popCustomTokenView:
-            state.customTokenView = nil
+        case .presentTokenView(let token):
+            state.tokenView = TokenVM.State(address: state.address, token: token)
             return .none
-        case .customTokenView(let action):
+        case .popTokenView:
+            state.tokenView = nil
+            return .none
+        case .tokenView(let action):
+            return .none
+        case .addToken:
+            guard let address = EthereumAddress(state.inputERC20Address) else {
+                return .none
+            }
+
+            let flow = Future<ERC20Token, AppError> { promise in
+                DispatchQueue.global(qos: .background).async {
+                    let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
+                    let contract = web3.contract(Web3.Utils.erc20ABI, at: address, abiVersion: 2)!
+                    var options = TransactionOptions.defaultOptions
+
+                    do {
+                        let result = try contract.read(
+                            "name",
+                            parameters: [],
+                            extraData: Data(),
+                            transactionOptions: options
+                        )!.call()
+                        let name = result["0"] as! String
+                        let token = ERC20Token(address: address, name: name)
+                        var current = DataStore.shared.getTokens()
+                        current.append(token.data)
+                        DataStore.shared.saveTokens(val: current)
+                        promise(.success(token))
+                    } catch {
+                        promise(.failure(AppError.plain(error.localizedDescription)))
+                    }
+                }
+            }
+
+            return flow
+                .subscribe(on: environment.backgroundQueue)
+                .receive(on: environment.mainQueue)
+                .catchToEffect()
+                .map(SelectTokenVM.Action.addedToken)
+        case .addedToken(.success(let token)):
+            var current = state.tokens
+            current.append(token)
+            state.inputERC20Address = ""
+            state.tokens = current
+            return .none
+        case .addedToken(.failure(_)):
+            return .none
+        case .inputERC20Address(let val):
+            state.inputERC20Address = val
             return .none
         }
     }
     .connect(
-        CustomTokenVM.reducer,
-        state: \.customTokenView,
-        action: /SelectTokenVM.Action.customTokenView,
+        TokenVM.reducer,
+        state: \.tokenView,
+        action: /SelectTokenVM.Action.tokenView,
         environment: { _environment in
-            CustomTokenVM.Environment(
+            TokenVM.Environment(
                 mainQueue: _environment.mainQueue,
                 backgroundQueue: _environment.backgroundQueue
             )
@@ -28,18 +79,45 @@ enum SelectTokenVM {
     )
 }
 
+struct ERC20Token: Hashable, Equatable {
+    let address: EthereumAddress
+    let name: String
+
+    var id: String {
+        return address.address
+    }
+
+    var data: [String: String] {
+        return [
+            "address": id,
+            "name": name
+        ]
+    }
+    
+    static func restore(from: [String: Any]) -> ERC20Token {
+        return ERC20Token(address: EthereumAddress(from["address"] as! String)!, name: from["name"] as! String)
+    }
+}
+
 extension SelectTokenVM {
     enum Action: Equatable {
-        case presentCustomTokenView
-        case popCustomTokenView
+        case initialize
+        case presentTokenView(ERC20Token)
+        case popTokenView
+        case addToken
+        case addedToken(Result<ERC20Token, AppError>)
+        case inputERC20Address(String)
 
-        case customTokenView(CustomTokenVM.Action)
+        case tokenView(TokenVM.Action)
     }
 
     struct State: Equatable {
         let address: EthereumAddress
 
-        var customTokenView: CustomTokenVM.State?
+        var inputERC20Address = ""
+        var tokens: [ERC20Token] = []
+
+        var tokenView: TokenVM.State?
     }
 
     struct Environment {

@@ -88,6 +88,13 @@ struct Transaction: Codable, Identifiable, Equatable, Hashable {
     }
     
     func isSendToContract() -> Bool {
-        return EthereumAddress(customTokenAddress)!.address == EthereumAddress(to)!.address
+        let tokens = DataStore.shared.getTokens().map { ERC20Token.restore(from: $0) }
+        for token in tokens {
+            if token.address.address == EthereumAddress(to)?.address {
+                return true
+            }
+        }
+        
+        return false
     }
 }

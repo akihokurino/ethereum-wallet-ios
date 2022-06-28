@@ -3,8 +3,8 @@ import SwiftUI
 import SwiftUIRefresh
 import web3swift
 
-struct CustomTokenView: View {
-    let store: Store<CustomTokenVM.State, CustomTokenVM.Action>
+struct TokenView: View {
+    let store: Store<TokenVM.State, TokenVM.Action>
 
     var body: some View {
         WithViewStore(store) { viewStore in
@@ -17,7 +17,7 @@ struct CustomTokenView: View {
                             .lineLimit(nil)
                     }
                     Spacer().frame(height: 20)
-                    Text("\(viewStore.state.balance) CMTN")
+                    Text("\(viewStore.state.balance)")
                         .frame(
                             minWidth: 0,
                             maxWidth: .infinity,
@@ -41,13 +41,13 @@ struct CustomTokenView: View {
                     Text("取引作成")
                     Spacer().frame(height: 10)
                     TextFieldView(value: viewStore.binding(
-                        get: \.inputValueCMTN,
-                        send: CustomTokenVM.Action.inputValueCMTN
-                    ), label: "取引額（CMTN）", keyboardType: .decimalPad)
+                        get: \.inputAmount,
+                        send: TokenVM.Action.inputAmount
+                    ), label: "トークン量", keyboardType: .decimalPad)
                     Spacer().frame(height: 10)
                     TextFieldView(value: viewStore.binding(
                         get: \.inputToAddress,
-                        send: CustomTokenVM.Action.inputToAddress
+                        send: TokenVM.Action.inputToAddress
                     ), label: "宛先", keyboardType: .emailAddress)
                     Spacer().frame(height: 30)
                     ActionButton(text: "送信", background: .primary) {
@@ -60,7 +60,7 @@ struct CustomTokenView: View {
                 .listRowInsets(EdgeInsets())
             }
             .listStyle(PlainListStyle())
-            .navigationBarTitle("CustomToken", displayMode: .inline)
+            .navigationBarTitle(viewStore.state.token.name, displayMode: .inline)
             .onAppear {
                 viewStore.send(.startInitialize)
             }
@@ -69,14 +69,14 @@ struct CustomTokenView: View {
                     if viewStore.state.shouldShowHUD {
                         HUD(isLoading: viewStore.binding(
                             get: \.shouldShowHUD,
-                            send: CustomTokenVM.Action.shouldShowHUD
+                            send: TokenVM.Action.shouldShowHUD
                         ))
                     }
                 }, alignment: .center
             )
             .pullToRefresh(isShowing: viewStore.binding(
                 get: \.shouldPullToRefresh,
-                send: CustomTokenVM.Action.shouldPullToRefresh
+                send: TokenVM.Action.shouldPullToRefresh
             )) {
                 viewStore.send(.startRefresh)
             }
