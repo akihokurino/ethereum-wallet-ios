@@ -3,28 +3,34 @@
 - swiftui
 - combine
 - the composable architecture ( https://github.com/pointfreeco/swift-composable-architecture ）
-- ethereum
-- ropsten
 - web3swift ( https://github.com/skywinder/web3swift )
-- faucet ( https://faucet.ropsten.be/ )
-- geth ( https://geth.ethereum.org/ )
 - alamofire ( https://github.com/Alamofire/Alamofire )
+- metamask
+- ethereum
+- goerli
+- geth ( https://geth.ethereum.org/ )
 - truffle v5.4.28 ( https://trufflesuite.com/ )
 - solidity v0.8.11
 - open zeppelin ( https://openzeppelin.com/ )
 - infura ( https://infura.io/ )
-- metamask
 
 ## Done
 
 - connect private net by geth
-- connect test net by ropsten + infura
-- create private key and wallet
+- connect test net of goerli
+- create private key
+- import private key
 - get ether balance
 - send ether
-- get erc20 token balance by my smart contract
-- send erc20 token by my smart contract
+- get erc20 token balance
+- send erc20 token
 - fetch all transactions related by my address
+
+## ERC20
+
+- TokenA ( 0x58bBe70EF8239B9d09F10a70F0FF291DFD70f8Df )
+- TokenB ( 0x6f89e3F74216A78778667f86A7e32449CB61Bed7 )
+- TokenC ( 0x46005CbED485e6BFbE3F7Dc50D8BE5553Af989e1 )
 
 ## Images
 

@@ -19,11 +19,11 @@ truffle-migrate-private-net:
 truffle-console-private-net:
 	./node_modules/.bin/truffle console --network development
 
-truffle-migrate-ropsten-net:
-	./node_modules/.bin/truffle migrate --network ropsten
+truffle-migrate-goerli-net:
+	./node_modules/.bin/truffle migrate --network goerli
 
-truffle-console-ropsten-net:
-	./node_modules/.bin/truffle console --network ropsten
+truffle-console-goerli-net:
+	./node_modules/.bin/truffle console --network goerli
 
 init-private-net:
 	geth --datadir ./private-net/ init ./private-net/genesis.json

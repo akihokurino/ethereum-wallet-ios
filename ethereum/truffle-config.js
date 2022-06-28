@@ -19,13 +19,10 @@
  */
 
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-const PrivateKeyProvider = require("truffle-privatekey-provider");
 
 const fs = require("fs");
 const mnemonic = fs.readFileSync(".mnemonic").toString().trim();
-const privateKey = fs.readFileSync(".privatekey").toString().trim();
-const ropstenUrl =
-  "https://ropsten.infura.io/v3/0cdf45dd2e0b4a7e9ccc119ea926464f";
+const networkUrl = fs.readFileSync(".infura").toString().trim();
 
 module.exports = {
   /**
@@ -62,13 +59,20 @@ module.exports = {
     // Useful for deploying to a public network.
     // NB: It's important to wrap the provider as a function.
     ropsten: {
-      provider: () => new HDWalletProvider(mnemonic, ropstenUrl),
-      // provider: () => new PrivateKeyProvider(privateKey, ropstenUrl),
+      provider: () => new HDWalletProvider(mnemonic, networkUrl),
       network_id: 3, // Ropsten's id
       gas: 5500000, // Ropsten has a lower block limit than mainnet
       confirmations: 2, // # of confs to wait between deployments. (default: 0)
       timeoutBlocks: 200, // # of blocks before a deployment times out  (minimum/default: 50)
       skipDryRun: true, // Skip dry run before migrations? (default: false for public nets )
+    },
+    goerli: {
+      provider: () => new HDWalletProvider(mnemonic, networkUrl),
+      network_id: 5,
+      gas: 5500000,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true,
     },
     // Useful for private networks
     // private: {
