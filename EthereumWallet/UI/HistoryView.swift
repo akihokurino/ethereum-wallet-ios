@@ -10,8 +10,10 @@ struct HistoryView: View {
                 ForEach(viewStore.state.transactions, id: \.self) { transaction in
                     if transaction.isMine(address: viewStore.state.address) {
                         OutHistoryView(transaction: transaction)
+                            .listRowSeparator(.hidden)
                     } else {
                         InHistoryView(transaction: transaction)
+                            .listRowSeparator(.hidden)
                     }
                 }
             }

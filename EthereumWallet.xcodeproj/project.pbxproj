@@ -44,7 +44,7 @@
 		024E2B0B2799022A003A9B55 /* TokenVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenVM.swift; sourceTree = "<group>"; };
 		0280DA7D279670390087E62F /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		0280DA7F279670850087E62F /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
-		02A0B2B72795660F00AE925C /* Ethereumウォレット.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Ethereumウォレット.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		02A0B2B72795660F00AE925C /* イーサウォレット.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "イーサウォレット.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02A0B2BA2795660F00AE925C /* EthereumWalletApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EthereumWalletApp.swift; sourceTree = "<group>"; };
 		02A0B2BC2795660F00AE925C /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		02A0B2BE2795661000AE925C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -89,7 +89,7 @@
 		02A0B2B82795660F00AE925C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				02A0B2B72795660F00AE925C /* Ethereumウォレット.app */,
+				02A0B2B72795660F00AE925C /* イーサウォレット.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -204,7 +204,7 @@
 				02DE565E2795753900E28F40 /* ActivityIndicatorView */,
 			);
 			productName = EthereumWallet;
-			productReference = 02A0B2B72795660F00AE925C /* Ethereumウォレット.app */;
+			productReference = 02A0B2B72795660F00AE925C /* イーサウォレット.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -450,7 +450,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "app.akiho.ethereum-wallet";
-				PRODUCT_NAME = "Ethereumウォレット";
+				PRODUCT_NAME = "イーサウォレット";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -480,7 +480,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "app.akiho.ethereum-wallet";
-				PRODUCT_NAME = "Ethereumウォレット";
+				PRODUCT_NAME = "イーサウォレット";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
