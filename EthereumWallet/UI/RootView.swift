@@ -58,6 +58,16 @@ struct RootView: View {
             .onAppear {
                 viewStore.send(.initialize)
             }
+            .overlay(
+                Group {
+                    if viewStore.state.shouldShowHUD {
+                        HUD(isLoading: viewStore.binding(
+                            get: \.shouldShowHUD,
+                            send: RootVM.Action.shouldShowHUD
+                        ))
+                    }
+                }, alignment: .center
+            )
         }
     }
 }

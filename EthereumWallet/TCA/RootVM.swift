@@ -6,17 +6,24 @@ enum RootVM {
     static let reducer = Reducer<State, Action, Environment> { state, action, _ in
         switch action {
         case .initialize:
+            state.shouldShowHUD = true
+
             let privateKey = DataStore.shared.getPrivateKey()!
             let keystore = try! EthereumKeystoreV3(privateKey: privateKey)!
             let keyData = try! JSONEncoder().encode(keystore.keystoreParams)
             let address = keystore.addresses!.first!
-
             let keystoreManager = KeystoreManager([keystore])
             let pkData = try! keystoreManager.UNSAFE_getPrivateKeyData(password: "web3swift", account: address).toHexString()
-            
+
             state.homeView = HomeVM.State(address: address)
             state.selectTokenView = SelectTokenVM.State(address: address)
             state.historyView = HistoryVM.State(address: address)
+
+            state.shouldShowHUD = false
+
+            return .none
+        case .shouldShowHUD(let val):
+            state.shouldShowHUD = val
             return .none
         case .homeView(let action):
             return .none
@@ -64,6 +71,7 @@ enum RootVM {
 extension RootVM {
     enum Action: Equatable {
         case initialize
+        case shouldShowHUD(Bool)
 
         case homeView(HomeVM.Action)
         case selectTokenView(SelectTokenVM.Action)
@@ -71,6 +79,7 @@ extension RootVM {
     }
 
     struct State: Equatable {
+        var shouldShowHUD = false
         var homeView: HomeVM.State?
         var selectTokenView: SelectTokenVM.State?
         var historyView: HistoryVM.State?
