@@ -19,7 +19,7 @@ struct RootView: View {
                 .tabItem {
                     VStack {
                         Image(systemName: "wallet.pass")
-                        Text("ホーム")
+                        Text("イーサ")
                     }
                 }.tag(1)
 

@@ -60,7 +60,7 @@ struct HomeView: View {
                 .listRowInsets(EdgeInsets())
             }
             .listStyle(PlainListStyle())
-            .navigationBarTitle("ホーム", displayMode: .inline)
+            .navigationBarTitle("イーサ", displayMode: .inline)
             .onAppear {
                 viewStore.send(.startInitialize)
             }
@@ -74,11 +74,8 @@ struct HomeView: View {
                     }
                 }, alignment: .center
             )
-            .pullToRefresh(isShowing: viewStore.binding(
-                get: \.shouldPullToRefresh,
-                send: HomeVM.Action.shouldPullToRefresh
-            )) {
-                viewStore.send(.startRefresh)
+            .refreshable {
+                await viewStore.send(.startRefresh, while: \.shouldPullToRefresh)
             }
         }
     }

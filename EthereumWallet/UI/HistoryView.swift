@@ -7,7 +7,7 @@ struct HistoryView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             List {
-                ForEach(viewStore.state.transactions, id: \.self) { transaction in
+                ForEach(viewStore.state.transactions.filter { !$0.isSendToContract() && (Double($0.valueEth) ?? 0.0) > 0.0 }, id: \.self) { transaction in
                     if transaction.isMine(address: viewStore.state.address) {
                         OutHistoryView(transaction: transaction)
                             .listRowSeparator(.hidden)
@@ -32,11 +32,8 @@ struct HistoryView: View {
                     }
                 }, alignment: .center
             )
-            .pullToRefresh(isShowing: viewStore.binding(
-                get: \.shouldPullToRefresh,
-                send: HistoryVM.Action.shouldPullToRefresh
-            )) {
-                viewStore.send(.startRefresh)
+            .refreshable {
+                await viewStore.send(.startRefresh, while: \.shouldPullToRefresh)
             }
         }
     }
@@ -53,29 +50,30 @@ struct InHistoryView: View {
 
             Spacer().frame(width: 10)
 
-            VStack(alignment: .leading) {
-                Text("トランザクションハッシュ: \n\(transaction.hash)")
-                    
-                    .lineLimit(nil)
+            VStack(alignment: .trailing) {
+                Text(transaction.displayDate)
                     .foregroundColor(Color.white)
-                    .font(.callout)
-                Spacer().frame(height: 10)
-                Text("送り元: \n\(transaction.from)")
-                    .lineLimit(nil)
-                    .foregroundColor(Color.white)
-                    .font(.callout)
-                Spacer().frame(height: 10)
-                Text("総額: \(transaction.valueEth) Ether")
-                    .foregroundColor(Color.white)
-                    .font(.callout)
-                Spacer().frame(height: 10)
-                Text("日付: \(transaction.displayDate)")
-                    .foregroundColor(Color.white)
-                    .font(.callout)
+                    .font(.headline)
+                Spacer().frame(height: 5)
+                VStack(alignment: .leading) {
+                    Text(transaction.hash)
+                        .lineLimit(nil)
+                        .foregroundColor(Color.white)
+                        .font(.subheadline)
+                    Spacer().frame(height: 10)
+                    Text("From: \n\(transaction.from)")
+                        .lineLimit(nil)
+                        .foregroundColor(Color.white)
+                        .font(.subheadline)
+                    Spacer().frame(height: 10)
+                    Text("Amount: \(transaction.valueEth) Ether")
+                        .foregroundColor(Color.white)
+                        .font(.headline)
+                }
+                .padding()
+                .background(transaction.error ? Color.red : Color(red: 0, green: 201.0 / 255.0, blue: 167.0 / 255.0))
+                .cornerRadius(5.0)
             }
-            .padding()
-            .background(transaction.error ? Color.red : Color(red: 0, green: 201.0 / 255.0, blue: 167.0 / 255.0))
-            .cornerRadius(5.0)
         }
     }
 }
@@ -86,34 +84,29 @@ struct OutHistoryView: View {
     var body: some View {
         HStack(alignment: .bottom) {
             VStack(alignment: .leading) {
-                Text("トランザクションハッシュ: \n\(transaction.hash)")
-                    .lineLimit(nil)
+                Text(transaction.displayDate)
                     .foregroundColor(Color.white)
-                    .font(.callout)
-                Spacer().frame(height: 10)
-                if transaction.isSendToContract() {
-                    Text("コントラクト呼び出し")
-                        .foregroundColor(Color.white)
-                        .font(.callout)
-                    Spacer().frame(height: 10)
-                } else {
-                    Text("送り先: \n\(transaction.to)")
+                    .font(.headline)
+                Spacer().frame(height: 5)
+                VStack(alignment: .leading) {
+                    Text(transaction.hash)
                         .lineLimit(nil)
                         .foregroundColor(Color.white)
-                        .font(.callout)
+                        .font(.subheadline)
                     Spacer().frame(height: 10)
-                    Text("総額: \(transaction.valueEth) Ether")
+                    Text("To: \n\(transaction.to)")
+                        .lineLimit(nil)
                         .foregroundColor(Color.white)
-                        .font(.callout)
+                        .font(.subheadline)
                     Spacer().frame(height: 10)
+                    Text("Amount: \(transaction.valueEth) Ether")
+                        .foregroundColor(Color.white)
+                        .font(.headline)
                 }
-                Text("日付: \(transaction.displayDate)")
-                    .foregroundColor(Color.white)
-                    .font(.callout)
+                .padding()
+                .background(transaction.error ? Color.red : Color(red: 219.0 / 255.0, green: 154.0 / 255.0, blue: 4.0 / 255.0))
+                .cornerRadius(5.0)
             }
-            .padding()
-            .background(transaction.error ? Color.red : Color(red: 219.0 / 255.0, green: 154.0 / 255.0, blue: 4.0 / 255.0))
-            .cornerRadius(5.0)
 
             Spacer().frame(width: 10)
 

@@ -22,7 +22,6 @@
 		02DE56462795670F00E28F40 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE56452795670F00E28F40 /* HomeView.swift */; };
 		02DE5649279569B200E28F40 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 02DE5648279569B200E28F40 /* ComposableArchitecture */; };
 		02DE564C279569F000E28F40 /* web3swift in Frameworks */ = {isa = PBXBuildFile; productRef = 02DE564B279569F000E28F40 /* web3swift */; };
-		02DE564F27956AAF00E28F40 /* SwiftUIRefresh in Frameworks */ = {isa = PBXBuildFile; productRef = 02DE564E27956AAF00E28F40 /* SwiftUIRefresh */; };
 		02DE565227956AE800E28F40 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 02DE565127956AE800E28F40 /* Alamofire */; };
 		02DE565527956B5E00E28F40 /* RootVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE565427956B5E00E28F40 /* RootVM.swift */; };
 		02DE565727956B6F00E28F40 /* HomeVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE565627956B6F00E28F40 /* HomeVM.swift */; };
@@ -68,7 +67,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				02DE565F2795753900E28F40 /* ActivityIndicatorView in Frameworks */,
-				02DE564F27956AAF00E28F40 /* SwiftUIRefresh in Frameworks */,
 				02DE565227956AE800E28F40 /* Alamofire in Frameworks */,
 				02DE5649279569B200E28F40 /* ComposableArchitecture in Frameworks */,
 				02DE564C279569F000E28F40 /* web3swift in Frameworks */,
@@ -199,7 +197,6 @@
 			packageProductDependencies = (
 				02DE5648279569B200E28F40 /* ComposableArchitecture */,
 				02DE564B279569F000E28F40 /* web3swift */,
-				02DE564E27956AAF00E28F40 /* SwiftUIRefresh */,
 				02DE565127956AE800E28F40 /* Alamofire */,
 				02DE565E2795753900E28F40 /* ActivityIndicatorView */,
 			);
@@ -234,7 +231,6 @@
 			packageReferences = (
 				02DE5647279569B200E28F40 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				02DE564A279569F000E28F40 /* XCRemoteSwiftPackageReference "web3swift" */,
-				02DE564D27956AAF00E28F40 /* XCRemoteSwiftPackageReference "SwiftUIRefresh" */,
 				02DE565027956AE800E28F40 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				02DE565D2795753900E28F40 /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */,
 			);
@@ -439,12 +435,12 @@
 				DEVELOPMENT_TEAM = 39KF2M8S75;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Ethウォレット";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -453,6 +449,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "app.akiho.ethereum-wallet";
 				PRODUCT_NAME = "イーサウォレット";
 				PROVISIONING_PROFILE_SPECIFIER = "ethereum wallet dev";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -471,12 +470,12 @@
 				DEVELOPMENT_TEAM = 39KF2M8S75;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Ethウォレット";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -485,6 +484,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "app.akiho.ethereum-wallet";
 				PRODUCT_NAME = "イーサウォレット";
 				PROVISIONING_PROFILE_SPECIFIER = "ethereum wallet dev";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -531,14 +533,6 @@
 				minimumVersion = 2.0.0;
 			};
 		};
-		02DE564D27956AAF00E28F40 /* XCRemoteSwiftPackageReference "SwiftUIRefresh" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/timbersoftware/SwiftUIRefresh.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		02DE565027956AE800E28F40 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -567,11 +561,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 02DE564A279569F000E28F40 /* XCRemoteSwiftPackageReference "web3swift" */;
 			productName = web3swift;
-		};
-		02DE564E27956AAF00E28F40 /* SwiftUIRefresh */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 02DE564D27956AAF00E28F40 /* XCRemoteSwiftPackageReference "SwiftUIRefresh" */;
-			productName = SwiftUIRefresh;
 		};
 		02DE565127956AE800E28F40 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
