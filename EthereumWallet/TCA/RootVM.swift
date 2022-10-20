@@ -13,8 +13,7 @@ enum RootVM {
 
             let keystoreManager = KeystoreManager([keystore])
             let pkData = try! keystoreManager.UNSAFE_getPrivateKeyData(password: "web3swift", account: address).toHexString()
-            print("secret: \(pkData)")
-
+            
             state.homeView = HomeVM.State(address: address)
             state.selectTokenView = SelectTokenVM.State(address: address)
             state.historyView = HistoryVM.State(address: address)
