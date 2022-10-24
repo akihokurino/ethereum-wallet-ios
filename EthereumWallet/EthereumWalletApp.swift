@@ -16,7 +16,7 @@ struct EthereumWalletApp: App {
     )
 
     var body: some Scene {
-        WindowGroup {
+        WindowGroup {            
             RootView(store: store)
         }
     }

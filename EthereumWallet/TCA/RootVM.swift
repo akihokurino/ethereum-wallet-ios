@@ -1,26 +1,39 @@
+import Combine
 import ComposableArchitecture
 import Foundation
 import web3swift
 
 enum RootVM {
-    static let reducer = Reducer<State, Action, Environment> { state, action, _ in
+    static let reducer = Reducer<State, Action, Environment> { state, action, environment in
         switch action {
-        case .initialize:
+        case .startInitialize:
             state.shouldShowHUD = true
+            
+            let flow = Future<EthereumAddress, AppError> { promise in
+                DispatchQueue.global(qos: .background).async {
+                    do {
+                        let privateKey = DataStore.shared.getPrivateKey()!
+                        let keystore = try EthereumKeystoreV3(privateKey: privateKey)!
+                        promise(.success(keystore.addresses!.first!))
+                    } catch {
+                        promise(.failure(AppError.plain(error.localizedDescription)))
+                    }
+                }
+            }
 
-            let privateKey = DataStore.shared.getPrivateKey()!
-            let keystore = try! EthereumKeystoreV3(privateKey: privateKey)!
-            let keyData = try! JSONEncoder().encode(keystore.keystoreParams)
-            let address = keystore.addresses!.first!
-            let keystoreManager = KeystoreManager([keystore])
-            let pkData = try! keystoreManager.UNSAFE_getPrivateKeyData(password: "web3swift", account: address).toHexString()
-
+            return flow
+                .subscribe(on: environment.backgroundQueue)
+                .receive(on: environment.mainQueue)
+                .catchToEffect()
+                .map(RootVM.Action.endInitialize)
+        case .endInitialize(.success(let address)):
             state.homeView = HomeVM.State(address: address)
             state.selectTokenView = SelectTokenVM.State(address: address)
             state.historyView = HistoryVM.State(address: address)
-
             state.shouldShowHUD = false
-
+            return .none
+        case .endInitialize(.failure(_)):
+            state.shouldShowHUD = false
             return .none
         case .shouldShowHUD(let val):
             state.shouldShowHUD = val
@@ -70,7 +83,8 @@ enum RootVM {
 
 extension RootVM {
     enum Action: Equatable {
-        case initialize
+        case startInitialize
+        case endInitialize(Result<EthereumAddress, AppError>)
         case shouldShowHUD(Bool)
 
         case homeView(HomeVM.Action)

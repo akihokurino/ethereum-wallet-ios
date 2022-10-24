@@ -5,7 +5,6 @@
 - the composable architecture ( https://github.com/pointfreeco/swift-composable-architecture ）
 - web3swift ( https://github.com/skywinder/web3swift )
 - alamofire ( https://github.com/Alamofire/Alamofire )
-- metamask
 - ethereum
 - goerli
 - geth ( https://geth.ethereum.org/ )
@@ -14,14 +13,16 @@
 - open zeppelin ( https://openzeppelin.com/ )
 - infura ( https://infura.io/ )
 
-## Done
+## Support
 
 - connect private net by geth
 - connect test net of goerli
 - create private key
 - import private key
+- export private key
 - get ether balance
 - send ether
+- register erc20 token
 - get erc20 token balance
 - send erc20 token
 - fetch all transactions related by my address

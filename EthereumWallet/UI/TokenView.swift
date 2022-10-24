@@ -1,6 +1,5 @@
 import ComposableArchitecture
 import SwiftUI
-import SwiftUIRefresh
 import web3swift
 
 struct TokenView: View {

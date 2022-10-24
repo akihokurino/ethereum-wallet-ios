@@ -143,6 +143,37 @@ enum HomeVM {
         case .inputToAddress(let val):
             state.inputToAddress = val
             return .none
+        case .startExportPrivateKey:
+            state.shouldShowHUD = true
+
+            let address = state.address
+
+            let flow = Future<String, AppError> { promise in
+                DispatchQueue.global(qos: .background).async {
+                    do {
+                        let privateKey = DataStore.shared.getPrivateKey()!
+                        let keystore = try EthereumKeystoreV3(privateKey: privateKey)!
+                        let keystoreManager = KeystoreManager([keystore])
+                        let pkData = try keystoreManager.UNSAFE_getPrivateKeyData(password: "web3swift", account: address).toHexString()
+                        promise(.success(pkData))
+                    } catch {
+                        promise(.failure(AppError.plain(error.localizedDescription)))
+                    }
+                }
+            }
+
+            return flow
+                .subscribe(on: environment.backgroundQueue)
+                .receive(on: environment.mainQueue)
+                .catchToEffect()
+                .map(HomeVM.Action.endExportPrivateKey)
+        case .endExportPrivateKey(.success(let key)):
+            state.privateKey = key
+            state.shouldShowHUD = false
+            return .none
+        case .endExportPrivateKey(.failure(_)):
+            state.shouldShowHUD = false
+            return .none
         }
     }
 }
@@ -159,6 +190,8 @@ extension HomeVM {
         case endSendTransaction(Result<String, AppError>)
         case inputValueEth(String)
         case inputToAddress(String)
+        case startExportPrivateKey
+        case endExportPrivateKey(Result<String, AppError>)
     }
 
     struct State: Equatable {
@@ -168,6 +201,7 @@ extension HomeVM {
         var shouldPullToRefresh = false
         var isInitialized = false
         var balance = ""
+        var privateKey = ""
 
         var inputValueEth = ""
         var inputToAddress = ""

@@ -1,10 +1,11 @@
 import ComposableArchitecture
 import SwiftUI
-import SwiftUIRefresh
 import web3swift
 
 struct HomeView: View {
     let store: Store<HomeVM.State, HomeVM.Action>
+
+    @State private var presentMenu = false
 
     var body: some View {
         WithViewStore(store) { viewStore in
@@ -17,6 +18,17 @@ struct HomeView: View {
                             .lineLimit(nil)
                     }
                     Spacer().frame(height: 20)
+
+                    if !viewStore.state.privateKey.isEmpty {
+                        Button(action: {
+                            print(viewStore.state.privateKey)
+                        }) {
+                            Text("秘密鍵: \n\(viewStore.state.privateKey)")
+                                .lineLimit(nil)
+                        }
+                        Spacer().frame(height: 20)
+                    }
+
                     Text("\(viewStore.state.balance) Ether")
                         .frame(
                             minWidth: 0,
@@ -76,6 +88,20 @@ struct HomeView: View {
             )
             .refreshable {
                 await viewStore.send(.startRefresh, while: \.shouldPullToRefresh)
+            }
+            .navigationBarItems(trailing: Button(action: {
+                presentMenu = true
+            }) {
+                Image(systemName: "ellipsis")
+            })
+            .actionSheet(isPresented: $presentMenu) {
+                ActionSheet(title: Text("メニュー"), buttons:
+                    [
+                        .default(Text("秘密鍵のエクスポート")) {
+                            viewStore.send(.startExportPrivateKey)
+                        },
+                        .cancel(),
+                    ])
             }
         }
     }
