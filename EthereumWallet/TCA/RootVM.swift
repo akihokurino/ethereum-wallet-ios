@@ -8,7 +8,7 @@ enum RootVM {
         switch action {
         case .startInitialize:
             state.shouldShowHUD = true
-            
+
             let flow = Future<EthereumAddress, AppError> { promise in
                 DispatchQueue.global(qos: .background).async {
                     do {
