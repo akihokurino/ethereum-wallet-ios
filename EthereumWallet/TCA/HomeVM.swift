@@ -87,21 +87,21 @@ enum HomeVM {
 
             let flow = Future<String, AppError> { promise in
                 Task.detached(priority: .background) {
+                    
                     let web3 = await Ethereum.shared.web3()
-                   
                     var transaction: CodableTransaction = .emptyTransaction
                     transaction.from = transaction.sender
                     transaction.to = EthereumAddress(to)!
                     transaction.value = Utilities.parseToBigUInt(valueEth, units: .eth)!
-                    transaction.gasLimitPolicy = .manual(78423)
-                    transaction.gasPricePolicy = .manual(20000000000)
+                    transaction.gasLimitPolicy = .automatic
+                    transaction.gasPricePolicy = .automatic
                     
                     do {
                         let result = try await web3.eth.send(transaction)
                         let hash = result.transaction.hash!
                         promise(.success(String(data: hash, encoding: .utf8)!))
                     } catch {
-                        print(error.localizedDescription)
+                        print("send tx error: \(error)")
                         promise(.failure(AppError.plain(error.localizedDescription)))
                     }
                 }

@@ -3,4 +3,160 @@
    uuid = "E364BAF4-4DDA-4784-9AC8-A0BB88E00827"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2B78DBBD-5D61-47C3-9F2E-DA3B1685BF0F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Library/Developer/Xcode/DerivedData/EthereumWallet-cxfdjepufpkclmguixekscsdfhgy/SourcePackages/checkouts/web3swift/Sources/web3swift/Tokens/ERC20/Web3+ERC20.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "72"
+            endingLineNumber = "72"
+            landmarkName = "transfer(from:to:amount:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FCF9EE4D-E6F4-4790-B65A-D8AB106DE0A9"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Library/Developer/Xcode/DerivedData/EthereumWallet-cxfdjepufpkclmguixekscsdfhgy/SourcePackages/checkouts/web3swift/Sources/Core/Transaction/CodableTransaction.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "192"
+            endingLineNumber = "192"
+            landmarkName = "resolve(provider:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "FCF9EE4D-E6F4-4790-B65A-D8AB106DE0A9 - 78a9665c2c6aed53"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for Core.CodableTransaction.resolve(provider: Core.Web3Provider) async -&gt; ()"
+                  moduleName = "&#x30a4;&#x30fc;&#x30b5;&#x30a6;&#x30a9;&#x30ec;&#x30c3;&#x30c8;"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/akiho/Library/Developer/Xcode/DerivedData/EthereumWallet-cxfdjepufpkclmguixekscsdfhgy/SourcePackages/checkouts/web3swift/Sources/Core/Transaction/CodableTransaction.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "193"
+                  endingLineNumber = "193"
+                  offsetFromSymbolStart = "95">
+               </Location>
+               <Location
+                  uuid = "FCF9EE4D-E6F4-4790-B65A-D8AB106DE0A9 - d40403f6e44cb27b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(2) await resume partial function for Core.CodableTransaction.resolve(provider: Core.Web3Provider) async -&gt; ()"
+                  moduleName = "&#x30a4;&#x30fc;&#x30b5;&#x30a6;&#x30a9;&#x30ec;&#x30c3;&#x30c8;"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/akiho/Library/Developer/Xcode/DerivedData/EthereumWallet-cxfdjepufpkclmguixekscsdfhgy/SourcePackages/checkouts/web3swift/Sources/Core/Transaction/CodableTransaction.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "193"
+                  endingLineNumber = "193"
+                  offsetFromSymbolStart = "53">
+               </Location>
+               <Location
+                  uuid = "FCF9EE4D-E6F4-4790-B65A-D8AB106DE0A9 - 5315df923243a96d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for Core.CodableTransaction.resolve(provider: Core.Web3Provider) async -&gt; ()"
+                  moduleName = "&#x30a4;&#x30fc;&#x30b5;&#x30a6;&#x30a9;&#x30ec;&#x30c3;&#x30c8;"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/akiho/Library/Developer/Xcode/DerivedData/EthereumWallet-cxfdjepufpkclmguixekscsdfhgy/SourcePackages/checkouts/web3swift/Sources/Core/Transaction/CodableTransaction.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "193"
+                  endingLineNumber = "193"
+                  offsetFromSymbolStart = "234">
+               </Location>
+               <Location
+                  uuid = "FCF9EE4D-E6F4-4790-B65A-D8AB106DE0A9 - 6c7b4204c6c76d1a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(12) suspend resume partial function for Core.CodableTransaction.resolve(provider: Core.Web3Provider) async -&gt; ()"
+                  moduleName = "&#x30a4;&#x30fc;&#x30b5;&#x30a6;&#x30a9;&#x30ec;&#x30c3;&#x30c8;"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/akiho/Library/Developer/Xcode/DerivedData/EthereumWallet-cxfdjepufpkclmguixekscsdfhgy/SourcePackages/checkouts/web3swift/Sources/Core/Transaction/CodableTransaction.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "193"
+                  endingLineNumber = "193"
+                  offsetFromSymbolStart = "61">
+               </Location>
+               <Location
+                  uuid = "FCF9EE4D-E6F4-4790-B65A-D8AB106DE0A9 - 536c359c898c8a1b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(13) suspend resume partial function for Core.CodableTransaction.resolve(provider: Core.Web3Provider) async -&gt; ()"
+                  moduleName = "&#x30a4;&#x30fc;&#x30b5;&#x30a6;&#x30a9;&#x30ec;&#x30c3;&#x30c8;"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/akiho/Library/Developer/Xcode/DerivedData/EthereumWallet-cxfdjepufpkclmguixekscsdfhgy/SourcePackages/checkouts/web3swift/Sources/Core/Transaction/CodableTransaction.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "193"
+                  endingLineNumber = "193"
+                  offsetFromSymbolStart = "138">
+               </Location>
+               <Location
+                  uuid = "FCF9EE4D-E6F4-4790-B65A-D8AB106DE0A9 - ba65e5153974d714"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(14) suspend resume partial function for Core.CodableTransaction.resolve(provider: Core.Web3Provider) async -&gt; ()"
+                  moduleName = "&#x30a4;&#x30fc;&#x30b5;&#x30a6;&#x30a9;&#x30ec;&#x30c3;&#x30c8;"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/akiho/Library/Developer/Xcode/DerivedData/EthereumWallet-cxfdjepufpkclmguixekscsdfhgy/SourcePackages/checkouts/web3swift/Sources/Core/Transaction/CodableTransaction.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "193"
+                  endingLineNumber = "193"
+                  offsetFromSymbolStart = "158">
+               </Location>
+               <Location
+                  uuid = "FCF9EE4D-E6F4-4790-B65A-D8AB106DE0A9 - a15d54ede83c7415"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(15) suspend resume partial function for Core.CodableTransaction.resolve(provider: Core.Web3Provider) async -&gt; ()"
+                  moduleName = "&#x30a4;&#x30fc;&#x30b5;&#x30a6;&#x30a9;&#x30ec;&#x30c3;&#x30c8;"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/akiho/Library/Developer/Xcode/DerivedData/EthereumWallet-cxfdjepufpkclmguixekscsdfhgy/SourcePackages/checkouts/web3swift/Sources/Core/Transaction/CodableTransaction.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "193"
+                  endingLineNumber = "193"
+                  offsetFromSymbolStart = "158">
+               </Location>
+               <Location
+                  uuid = "FCF9EE4D-E6F4-4790-B65A-D8AB106DE0A9 - 885604659be59116"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(16) suspend resume partial function for Core.CodableTransaction.resolve(provider: Core.Web3Provider) async -&gt; ()"
+                  moduleName = "&#x30a4;&#x30fc;&#x30b5;&#x30a6;&#x30a9;&#x30ec;&#x30c3;&#x30c8;"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/akiho/Library/Developer/Xcode/DerivedData/EthereumWallet-cxfdjepufpkclmguixekscsdfhgy/SourcePackages/checkouts/web3swift/Sources/Core/Transaction/CodableTransaction.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "193"
+                  endingLineNumber = "193"
+                  offsetFromSymbolStart = "203">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
