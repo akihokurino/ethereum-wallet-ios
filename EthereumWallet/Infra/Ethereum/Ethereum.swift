@@ -56,6 +56,7 @@ final class Ethereum {
         return Units.toEtherString(wei: balanceWei)
     }
 
+    // TODO: https://github.com/skywinder/web3swift/blob/master/Tests/web3swiftTests/localTests/UserCases.swift#L37
     func sendEth(to: EthereumAddress, amount: String) async throws -> String {
         var transaction: CodableTransaction = .emptyTransaction
         transaction.from = address
@@ -86,16 +87,20 @@ final class Ethereum {
         return String(balance)
     }
 
+    // TODO: https://github.com/skywinder/web3swift/blob/develop/Tests/web3swiftTests/localTests/ERC20Tests.swift#L36
     func erc20ContractTransfer(at: EthereumAddress, to: EthereumAddress, amount: String) async throws -> String {
-        // TODO: https://github.com/skywinder/web3swift/blob/develop/Tests/web3swiftTests/localTests/ERC20Tests.swift#L36
         let web3 = await web3()
+        let amount = Utilities.parseToBigUInt(amount, decimals: 0)!
+        let contract = web3.contract(Web3.Utils.erc20ABI, at: at, abiVersion: 2)!
         var transaction: CodableTransaction = .emptyTransaction
         transaction.from = address
         transaction.to = to
-        transaction.gasLimitPolicy = .automatic
-        transaction.gasPricePolicy = .automatic
-        let contract = ERC20(web3: web3, provider: web3.provider, address: at, transaction: transaction)
-        let result = try await contract.transfer(from: address, to: to, amount: amount).writeToChain(password: password)
+        transaction.gasLimitPolicy = .manual(8500000)
+        transaction.gasPricePolicy = .manual(40000000000)
+        transaction.callOnBlock = .latest
+        contract.transaction = transaction
+        let tx = contract.createWriteOperation("transfer", parameters: [to, amount] as [AnyObject], extraData: Data())!
+        let result = try await tx.writeToChain(password: password)
         let hash = result.transaction.hash!
         return String(data: hash, encoding: .utf8)!
     }
