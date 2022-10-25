@@ -2,6 +2,7 @@ import Alamofire
 import BigInt
 import Foundation
 import web3swift
+import Core
 
 class ListTransactionRequest: EtherscanRequestProtocol {
     typealias ResponseType = TransactionList
@@ -65,7 +66,7 @@ struct Transaction: Codable, Identifiable, Equatable, Hashable {
     }
     
     var valueEth: String {
-        return Web3.Utils.formatToEthereumUnits(BigUInt(UInt(value) ?? 0), toUnits: .eth, decimals: 3)!
+        return Units.toEtherString(wei: BigUInt(UInt(value) ?? 0))
     }
     
     var error: Bool {

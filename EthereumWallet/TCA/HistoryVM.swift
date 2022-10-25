@@ -1,10 +1,10 @@
 import Combine
 import ComposableArchitecture
+import Core
 import Foundation
-import web3swift
 
 enum HistoryVM {
-    static let reducer = Reducer<State, Action, Environment> { state, action, environment in
+    static let reducer = AnyReducer<State, Action, Environment> { state, action, environment in
         switch action {
             case .startInitialize:
                 guard !state.isInitialized else {

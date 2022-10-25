@@ -1,23 +1,17 @@
 import Combine
 import ComposableArchitecture
+import Core
 import Foundation
-import web3swift
 
 enum RootVM {
-    static let reducer = Reducer<State, Action, Environment> { state, action, environment in
+    static let reducer = AnyReducer<State, Action, Environment> { state, action, environment in
         switch action {
         case .startInitialize:
             state.shouldShowHUD = true
 
             let flow = Future<EthereumAddress, AppError> { promise in
-                DispatchQueue.global(qos: .background).async {
-                    do {
-                        let privateKey = DataStore.shared.getPrivateKey()!
-                        let keystore = try EthereumKeystoreV3(privateKey: privateKey)!
-                        promise(.success(keystore.addresses!.first!))
-                    } catch {
-                        promise(.failure(AppError.plain(error.localizedDescription)))
-                    }
+                Task.detached(priority: .background) {
+                    promise(.success(Ethereum.shared.address))
                 }
             }
 

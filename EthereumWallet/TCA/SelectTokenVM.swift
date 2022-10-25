@@ -1,10 +1,11 @@
 import Combine
 import ComposableArchitecture
+import Core
 import Foundation
 import web3swift
 
 enum SelectTokenVM {
-    static let reducer = Reducer<State, Action, Environment> { state, action, environment in
+    static let reducer = AnyReducer<State, Action, Environment> { state, action, environment in
         switch action {
         case .initialize:
             let tokens = DataStore.shared.getTokens().map { ERC20Token.restore(from: $0) }
@@ -24,18 +25,16 @@ enum SelectTokenVM {
             }
 
             let flow = Future<ERC20Token, AppError> { promise in
-                DispatchQueue.global(qos: .background).async {
-                    let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
+                Task.detached(priority: .background) {
+                    let web3 = await Ethereum.shared.web3()
                     let contract = web3.contract(Web3.Utils.erc20ABI, at: address, abiVersion: 2)!
-                    var options = TransactionOptions.defaultOptions
 
                     do {
-                        let result = try contract.read(
+                        let result = try await contract.createReadOperation(
                             "name",
                             parameters: [],
-                            extraData: Data(),
-                            transactionOptions: options
-                        )!.call()
+                            extraData: Data()
+                        )!.callContractMethod()
                         let name = result["0"] as! String
                         let token = ERC20Token(address: address, name: name)
                         var current = DataStore.shared.getTokens()
@@ -93,7 +92,7 @@ struct ERC20Token: Hashable, Equatable {
             "name": name
         ]
     }
-    
+
     static func restore(from: [String: Any]) -> ERC20Token {
         return ERC20Token(address: EthereumAddress(from["address"] as! String)!, name: from["name"] as! String)
     }

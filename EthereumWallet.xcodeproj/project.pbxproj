@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		022748BD27990A2A0066B557 /* Navigation+TCA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 022748BC27990A2A0066B557 /* Navigation+TCA.swift */; };
+		023E65D52907CC2400E831BC /* web3swift in Frameworks */ = {isa = PBXBuildFile; productRef = 023E65D42907CC2400E831BC /* web3swift */; };
+		023E65D82907CC3200E831BC /* ActivityIndicatorView in Frameworks */ = {isa = PBXBuildFile; productRef = 023E65D72907CC3200E831BC /* ActivityIndicatorView */; };
+		023E65DB2907CC4000E831BC /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 023E65DA2907CC4000E831BC /* Alamofire */; };
+		023E65DE2907CC7500E831BC /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 023E65DD2907CC7500E831BC /* ComposableArchitecture */; };
+		023E65E02907CC7500E831BC /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = 023E65DF2907CC7500E831BC /* Dependencies */; };
 		024E2B05279901CA003A9B55 /* SelectTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024E2B04279901CA003A9B55 /* SelectTokenView.swift */; };
 		024E2B08279901F0003A9B55 /* TokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024E2B07279901F0003A9B55 /* TokenView.swift */; };
 		024E2B0A27990218003A9B55 /* SelectTokenVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024E2B0927990218003A9B55 /* SelectTokenVM.swift */; };
@@ -20,19 +25,17 @@
 		02A0B2C22795661000AE925C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02A0B2C12795661000AE925C /* Preview Assets.xcassets */; };
 		02DE56442795670400E28F40 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE56432795670400E28F40 /* HistoryView.swift */; };
 		02DE56462795670F00E28F40 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE56452795670F00E28F40 /* HomeView.swift */; };
-		02DE5649279569B200E28F40 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 02DE5648279569B200E28F40 /* ComposableArchitecture */; };
-		02DE564C279569F000E28F40 /* web3swift in Frameworks */ = {isa = PBXBuildFile; productRef = 02DE564B279569F000E28F40 /* web3swift */; };
-		02DE565227956AE800E28F40 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 02DE565127956AE800E28F40 /* Alamofire */; };
 		02DE565527956B5E00E28F40 /* RootVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE565427956B5E00E28F40 /* RootVM.swift */; };
 		02DE565727956B6F00E28F40 /* HomeVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE565627956B6F00E28F40 /* HomeVM.swift */; };
 		02DE565927956B7D00E28F40 /* HistoryVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE565827956B7D00E28F40 /* HistoryVM.swift */; };
 		02DE565C279574CF00E28F40 /* HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE565B279574CF00E28F40 /* HUD.swift */; };
-		02DE565F2795753900E28F40 /* ActivityIndicatorView in Frameworks */ = {isa = PBXBuildFile; productRef = 02DE565E2795753900E28F40 /* ActivityIndicatorView */; };
 		02DE56622795796000E28F40 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE56612795796000E28F40 /* DataStore.swift */; };
 		02DE566527957EC100E28F40 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE566427957EC100E28F40 /* Environment.swift */; };
 		02DE566A27957FFB00E28F40 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE566927957FFB00E28F40 /* Transaction.swift */; };
-		02DE566C2795806D00E28F40 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE566B2795806D00E28F40 /* Client.swift */; };
+		02DE566C2795806D00E28F40 /* Etherscan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE566B2795806D00E28F40 /* Etherscan.swift */; };
 		02DE566E2795821F00E28F40 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE566D2795821F00E28F40 /* Error.swift */; };
+		02EFECAF2907B4D200AAC8E2 /* Ethereum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02EFECAE2907B4D200AAC8E2 /* Ethereum.swift */; };
+		02FADD892906D74B0007C23C /* Units.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FADD882906D74B0007C23C /* Units.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,8 +60,10 @@
 		02DE56612795796000E28F40 /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		02DE566427957EC100E28F40 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		02DE566927957FFB00E28F40 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
-		02DE566B2795806D00E28F40 /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
+		02DE566B2795806D00E28F40 /* Etherscan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Etherscan.swift; sourceTree = "<group>"; };
 		02DE566D2795821F00E28F40 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		02EFECAE2907B4D200AAC8E2 /* Ethereum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ethereum.swift; sourceTree = "<group>"; };
+		02FADD882906D74B0007C23C /* Units.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Units.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,10 +71,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				02DE565F2795753900E28F40 /* ActivityIndicatorView in Frameworks */,
-				02DE565227956AE800E28F40 /* Alamofire in Frameworks */,
-				02DE5649279569B200E28F40 /* ComposableArchitecture in Frameworks */,
-				02DE564C279569F000E28F40 /* web3swift in Frameworks */,
+				023E65E02907CC7500E831BC /* Dependencies in Frameworks */,
+				023E65DB2907CC4000E831BC /* Alamofire in Frameworks */,
+				023E65D82907CC3200E831BC /* ActivityIndicatorView in Frameworks */,
+				023E65DE2907CC7500E831BC /* ComposableArchitecture in Frameworks */,
+				023E65D52907CC2400E831BC /* web3swift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -162,6 +168,7 @@
 		02DE56602795794800E28F40 /* Infra */ = {
 			isa = PBXGroup;
 			children = (
+				02FADD872906D73B0007C23C /* Ethereum */,
 				02DE566627957FDA00E28F40 /* Etherscan */,
 				02DE56612795796000E28F40 /* DataStore.swift */,
 			);
@@ -171,10 +178,19 @@
 		02DE566627957FDA00E28F40 /* Etherscan */ = {
 			isa = PBXGroup;
 			children = (
-				02DE566B2795806D00E28F40 /* Client.swift */,
+				02DE566B2795806D00E28F40 /* Etherscan.swift */,
 				02DE566927957FFB00E28F40 /* Transaction.swift */,
 			);
 			path = Etherscan;
+			sourceTree = "<group>";
+		};
+		02FADD872906D73B0007C23C /* Ethereum */ = {
+			isa = PBXGroup;
+			children = (
+				02EFECAE2907B4D200AAC8E2 /* Ethereum.swift */,
+				02FADD882906D74B0007C23C /* Units.swift */,
+			);
+			path = Ethereum;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -195,10 +211,11 @@
 			);
 			name = EthereumWallet;
 			packageProductDependencies = (
-				02DE5648279569B200E28F40 /* ComposableArchitecture */,
-				02DE564B279569F000E28F40 /* web3swift */,
-				02DE565127956AE800E28F40 /* Alamofire */,
-				02DE565E2795753900E28F40 /* ActivityIndicatorView */,
+				023E65D42907CC2400E831BC /* web3swift */,
+				023E65D72907CC3200E831BC /* ActivityIndicatorView */,
+				023E65DA2907CC4000E831BC /* Alamofire */,
+				023E65DD2907CC7500E831BC /* ComposableArchitecture */,
+				023E65DF2907CC7500E831BC /* Dependencies */,
 			);
 			productName = EthereumWallet;
 			productReference = 02A0B2B72795660F00AE925C /* イーサウォレット.app */;
@@ -229,10 +246,10 @@
 			);
 			mainGroup = 02A0B2AE2795660F00AE925C;
 			packageReferences = (
-				02DE5647279569B200E28F40 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
-				02DE564A279569F000E28F40 /* XCRemoteSwiftPackageReference "web3swift" */,
-				02DE565027956AE800E28F40 /* XCRemoteSwiftPackageReference "Alamofire" */,
-				02DE565D2795753900E28F40 /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */,
+				023E65D32907CC2400E831BC /* XCRemoteSwiftPackageReference "web3swift" */,
+				023E65D62907CC3200E831BC /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */,
+				023E65D92907CC4000E831BC /* XCRemoteSwiftPackageReference "Alamofire" */,
+				023E65DC2907CC7500E831BC /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 			);
 			productRefGroup = 02A0B2B82795660F00AE925C /* Products */;
 			projectDirPath = "";
@@ -285,15 +302,17 @@
 				02DE56442795670400E28F40 /* HistoryView.swift in Sources */,
 				02DE566A27957FFB00E28F40 /* Transaction.swift in Sources */,
 				022748BD27990A2A0066B557 /* Navigation+TCA.swift in Sources */,
+				02EFECAF2907B4D200AAC8E2 /* Ethereum.swift in Sources */,
 				0280DA80279670850087E62F /* TextField.swift in Sources */,
 				02DE56462795670F00E28F40 /* HomeView.swift in Sources */,
 				024E2B08279901F0003A9B55 /* TokenView.swift in Sources */,
 				02DE56622795796000E28F40 /* DataStore.swift in Sources */,
 				02DE565927956B7D00E28F40 /* HistoryVM.swift in Sources */,
 				02DE565727956B6F00E28F40 /* HomeVM.swift in Sources */,
+				02FADD892906D74B0007C23C /* Units.swift in Sources */,
 				0280DA7E279670390087E62F /* Button.swift in Sources */,
 				024E2B0A27990218003A9B55 /* SelectTokenVM.swift in Sources */,
-				02DE566C2795806D00E28F40 /* Client.swift in Sources */,
+				02DE566C2795806D00E28F40 /* Etherscan.swift in Sources */,
 				02DE565C279574CF00E28F40 /* HUD.swift in Sources */,
 				02A0B2BB2795660F00AE925C /* EthereumWalletApp.swift in Sources */,
 				024E2B0C2799022A003A9B55 /* TokenVM.swift in Sources */,
@@ -517,60 +536,65 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		02DE5647279569B200E28F40 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.9.0;
-			};
-		};
-		02DE564A279569F000E28F40 /* XCRemoteSwiftPackageReference "web3swift" */ = {
+		023E65D32907CC2400E831BC /* XCRemoteSwiftPackageReference "web3swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/skywinder/web3swift.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
+				branch = master;
+				kind = branch;
 			};
 		};
-		02DE565027956AE800E28F40 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.0.0;
-			};
-		};
-		02DE565D2795753900E28F40 /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */ = {
+		023E65D62907CC3200E831BC /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/exyte/ActivityIndicatorView.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				branch = master;
+				kind = branch;
+			};
+		};
+		023E65D92907CC4000E831BC /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		023E65DC2907CC7500E831BC /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				branch = main;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		02DE5648279569B200E28F40 /* ComposableArchitecture */ = {
+		023E65D42907CC2400E831BC /* web3swift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 02DE5647279569B200E28F40 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
-			productName = ComposableArchitecture;
-		};
-		02DE564B279569F000E28F40 /* web3swift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 02DE564A279569F000E28F40 /* XCRemoteSwiftPackageReference "web3swift" */;
+			package = 023E65D32907CC2400E831BC /* XCRemoteSwiftPackageReference "web3swift" */;
 			productName = web3swift;
 		};
-		02DE565127956AE800E28F40 /* Alamofire */ = {
+		023E65D72907CC3200E831BC /* ActivityIndicatorView */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 02DE565027956AE800E28F40 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			package = 023E65D62907CC3200E831BC /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */;
+			productName = ActivityIndicatorView;
+		};
+		023E65DA2907CC4000E831BC /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 023E65D92907CC4000E831BC /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
-		02DE565E2795753900E28F40 /* ActivityIndicatorView */ = {
+		023E65DD2907CC7500E831BC /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 02DE565D2795753900E28F40 /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */;
-			productName = ActivityIndicatorView;
+			package = 023E65DC2907CC7500E831BC /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+		023E65DF2907CC7500E831BC /* Dependencies */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 023E65DC2907CC7500E831BC /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = Dependencies;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

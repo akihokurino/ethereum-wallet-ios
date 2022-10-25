@@ -1,10 +1,11 @@
 import Combine
 import ComposableArchitecture
+import Core
 import Foundation
-import web3swift
+import BigInt
 
 enum HomeVM {
-    static let reducer = Reducer<State, Action, Environment> { state, action, environment in
+    static let reducer = AnyReducer<State, Action, Environment> { state, action, environment in
         switch action {
         case .startInitialize:
             guard !state.isInitialized else {
@@ -15,12 +16,11 @@ enum HomeVM {
 
             let address = state.address
             let flow = Future<String, AppError> { promise in
-                DispatchQueue.global(qos: .background).async {
-                    let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
-
+                Task.detached(priority: .background) {
+                    let web3 = await Ethereum.shared.web3()
                     do {
-                        let balanceWei = try web3.eth.getBalance(address: address)
-                        let balanceEther = Web3.Utils.formatToEthereumUnits(balanceWei, toUnits: .eth, decimals: 3)!
+                        let balanceWei: BigUInt = try await web3.eth.getBalance(for: address)
+                        let balanceEther = Units.toEtherString(wei: balanceWei)
                         promise(.success(balanceEther))
                     } catch {
                         promise(.failure(AppError.plain(error.localizedDescription)))
@@ -46,12 +46,11 @@ enum HomeVM {
 
             let address = state.address
             let flow = Future<String, AppError> { promise in
-                DispatchQueue.global(qos: .background).async {
-                    let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
-
+                Task.detached(priority: .background) {
+                    let web3 = await Ethereum.shared.web3()
                     do {
-                        let balanceWei = try web3.eth.getBalance(address: address)
-                        let balanceEther = Web3.Utils.formatToEthereumUnits(balanceWei, toUnits: .eth, decimals: 3)!
+                        let balanceWei = try await web3.eth.getBalance(for: address)
+                        let balanceEther = Units.toEtherString(wei: balanceWei)
                         promise(.success(balanceEther))
                     } catch {
                         promise(.failure(AppError.plain(error.localizedDescription)))
@@ -88,36 +87,22 @@ enum HomeVM {
 
             let address = state.address
             let flow = Future<String, AppError> { promise in
-                DispatchQueue.global(qos: .background).async {
-                    let web3 = web3(provider: Web3HttpProvider(URL(string: Env["NETWORK_URL"]!)!)!)
-                    let privateKey = DataStore.shared.getPrivateKey()!
-                    let keystore = try! EthereumKeystoreV3(privateKey: privateKey)!
-                    let keystoreManager = KeystoreManager([keystore])
-                    web3.addKeystoreManager(keystoreManager)
-
+                Task.detached(priority: .background) {
+                    let web3 = await Ethereum.shared.web3()
                     let toAddress = EthereumAddress(to)!
-                    let amount = Web3.Utils.parseToBigUInt(valueEth, units: .eth)!
-                    var options = TransactionOptions.defaultOptions
-                    options.value = amount
-                    options.from = address
-                    options.to = toAddress
-                    options.gasPrice = .automatic
-                    options.gasLimit = .automatic
+                    let amount = Utilities.parseToBigUInt(valueEth, units: .eth)!
 
-                    let tx = web3.eth.sendETH(
-                        from: address,
-                        to: toAddress,
-                        amount: valueEth,
-                        units: .eth,
-                        extraData: Data(),
-                        transactionOptions: options
-                    )!
+                    var transaction: CodableTransaction = .emptyTransaction
+                    transaction.from = address
+                    transaction.value = amount
+                    transaction.gasLimitPolicy = .automatic
+                    transaction.gasPricePolicy = .automatic
 
                     do {
-                        let result = try tx.send()
-                        promise(.success(result.transaction.txhash ?? ""))
+                        let result = try await web3.eth.send(transaction)
+                        let hash = result.transaction.hash!
+                        promise(.success(String(data: hash, encoding: .utf8)!))
                     } catch {
-                        print("send tx error: \(error)")
                         promise(.failure(AppError.plain(error.localizedDescription)))
                     }
                 }
@@ -129,7 +114,6 @@ enum HomeVM {
                 .catchToEffect()
                 .map(HomeVM.Action.endSendTransaction)
         case .endSendTransaction(.success(let txhash)):
-            print("create tx: \(txhash)")
             state.inputValueEth = ""
             state.inputToAddress = ""
             state.shouldShowHUD = false
@@ -146,16 +130,10 @@ enum HomeVM {
         case .startExportPrivateKey:
             state.shouldShowHUD = true
 
-            let address = state.address
-
             let flow = Future<String, AppError> { promise in
-                DispatchQueue.global(qos: .background).async {
+                Task.detached(priority: .background) {
                     do {
-                        let privateKey = DataStore.shared.getPrivateKey()!
-                        let keystore = try EthereumKeystoreV3(privateKey: privateKey)!
-                        let keystoreManager = KeystoreManager([keystore])
-                        let pkData = try keystoreManager.UNSAFE_getPrivateKeyData(password: "web3swift", account: address).toHexString()
-                        promise(.success(pkData))
+                        promise(.success(try Ethereum.shared.export()))
                     } catch {
                         promise(.failure(AppError.plain(error.localizedDescription)))
                     }
