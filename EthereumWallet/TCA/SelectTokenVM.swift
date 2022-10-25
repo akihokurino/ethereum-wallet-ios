@@ -11,6 +11,9 @@ enum SelectTokenVM {
             let tokens = DataStore.shared.getTokens().map { ERC20Token.restore(from: $0) }
             state.tokens = tokens
             return .none
+        case .shouldShowHUD(let val):
+            state.shouldShowHUD = val
+            return .none
         case .presentTokenView(let token):
             state.tokenView = TokenVM.State(address: state.address, token: token)
             return .none
@@ -23,6 +26,8 @@ enum SelectTokenVM {
             guard let address = EthereumAddress(state.inputERC20Address) else {
                 return .none
             }
+            
+            state.shouldShowHUD = true
 
             let flow = Future<ERC20Token, AppError> { promise in
                 Task.detached(priority: .background) {
@@ -37,9 +42,9 @@ enum SelectTokenVM {
                         )!.callContractMethod()
                         let name = result["0"] as! String
                         let token = ERC20Token(address: address, name: name)
-                        var current = DataStore.shared.getTokens()
-                        current.append(token.data)
-                        DataStore.shared.saveTokens(val: current)
+                        var next = DataStore.shared.getTokens()
+                        next.append(token.data)
+                        DataStore.shared.saveTokens(val: next)
                         promise(.success(token))
                     } catch {
                         promise(.failure(AppError.plain(error.localizedDescription)))
@@ -53,15 +58,24 @@ enum SelectTokenVM {
                 .catchToEffect()
                 .map(SelectTokenVM.Action.addedToken)
         case .addedToken(.success(let token)):
-            var current = state.tokens
-            current.append(token)
+            var next = state.tokens
+            next.append(token)
+            state.tokens = next
             state.inputERC20Address = ""
-            state.tokens = current
+            state.shouldShowHUD = false
             return .none
         case .addedToken(.failure(_)):
+            state.shouldShowHUD = false
             return .none
         case .inputERC20Address(let val):
             state.inputERC20Address = val
+            return .none
+        case .deleteToken(let indexes):
+            var current = DataStore.shared.getTokens()
+            for index in indexes {
+                current.remove(at: index)
+            }
+            DataStore.shared.saveTokens(val: current)
             return .none
         }
     }
@@ -101,11 +115,13 @@ struct ERC20Token: Hashable, Equatable {
 extension SelectTokenVM {
     enum Action: Equatable {
         case initialize
+        case shouldShowHUD(Bool)
         case presentTokenView(ERC20Token)
         case popTokenView
         case addToken
         case addedToken(Result<ERC20Token, AppError>)
         case inputERC20Address(String)
+        case deleteToken(IndexSet)
 
         case tokenView(TokenVM.Action)
     }
@@ -113,6 +129,7 @@ extension SelectTokenVM {
     struct State: Equatable {
         let address: EthereumAddress
 
+        var shouldShowHUD = false
         var inputERC20Address = ""
         var tokens: [ERC20Token] = []
 

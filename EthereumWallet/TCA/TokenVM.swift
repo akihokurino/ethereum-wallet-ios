@@ -1,9 +1,9 @@
+import BigInt
 import Combine
 import ComposableArchitecture
 import Core
 import Foundation
 import web3swift
-import BigInt
 
 enum TokenVM {
     static let reducer = AnyReducer<State, Action, Environment> { state, action, environment in
@@ -20,14 +20,10 @@ enum TokenVM {
             let flow = Future<String, AppError> { promise in
                 Task.detached(priority: .background) {
                     let web3 = await Ethereum.shared.web3()
-                    let contract = web3.contract(Web3.Utils.erc20ABI, at: token.address, abiVersion: 2)!
+                    let contract = ERC20(web3: web3, provider: web3.provider, address: token.address, transaction: .emptyTransaction)
 
                     do {
-                        let result = try await contract.createReadOperation(
-                            "balanceOf",
-                            parameters: [address] as [AnyObject],
-                            extraData: Data())!.callContractMethod()
-                        let balance = result["0"] as! BigUInt
+                        let balance = try await contract.getBalance(account: address)
                         promise(.success(String(balance)))
                     } catch {
                         promise(.failure(AppError.plain(error.localizedDescription)))
@@ -56,14 +52,10 @@ enum TokenVM {
             let flow = Future<String, AppError> { promise in
                 Task.detached(priority: .background) {
                     let web3 = await Ethereum.shared.web3()
-                    let contract = web3.contract(Web3.Utils.erc20ABI, at: token.address, abiVersion: 2)!
+                    let contract = ERC20(web3: web3, provider: web3.provider, address: token.address, transaction: .emptyTransaction)
 
                     do {
-                        let result = try await contract.createReadOperation(
-                            "balanceOf",
-                            parameters: [address] as [AnyObject],
-                            extraData: Data())!.callContractMethod()
-                        let balance = result["0"] as! BigUInt
+                        let balance = try await contract.getBalance(account: address)
                         promise(.success(String(balance)))
                     } catch {
                         promise(.failure(AppError.plain(error.localizedDescription)))
@@ -103,17 +95,15 @@ enum TokenVM {
             let flow = Future<String, AppError> { promise in
                 Task.detached(priority: .background) {
                     let web3 = await Ethereum.shared.web3()
+                    var transaction: CodableTransaction = .emptyTransaction
+                    transaction.gasLimitPolicy = .manual(78423)
+                    transaction.gasPricePolicy = .manual(20000000000)
+                    let contract = ERC20(web3: web3, provider: web3.provider, address: token.address, transaction: transaction)
                     let toAddress = EthereumAddress(to)!
-                    let contract = web3.contract(Web3.Utils.erc20ABI, at: token.address, abiVersion: 2)!
-                    let amount = Utilities.parseToBigUInt(amount, decimals: 0)!
 
                     do {
-                        let result = try await contract.createWriteOperation(
-                            "transfer",
-                            parameters: [toAddress, amount] as [AnyObject],
-                            extraData: Data())!.writeToChain(password: Ethereum.shared.password)
-                        let hash = result.transaction.hash!
-                        promise(.success(String(data: hash, encoding: .utf8)!))
+                        try await contract.transfer(from: address, to: toAddress, amount: amount).callContractMethod()
+                        promise(.success(""))
                     } catch {
                         print("send tx error: \(error)")
                         promise(.failure(AppError.plain(error.localizedDescription)))

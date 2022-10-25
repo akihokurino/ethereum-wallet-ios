@@ -24,13 +24,25 @@ struct SelectTokenView: View {
                     Button(token.name) {
                         viewStore.send(.presentTokenView(token))
                     }
-                }
+                }.onDelete(perform: { indexes in
+                    viewStore.send(.deleteToken(indexes))
+                })
             }
             .listStyle(PlainListStyle())
             .navigationBarTitle("トークン", displayMode: .inline)
             .onAppear {
                 viewStore.send(.initialize)
             }
+            .overlay(
+                Group {
+                    if viewStore.state.shouldShowHUD {
+                        HUD(isLoading: viewStore.binding(
+                            get: \.shouldShowHUD,
+                            send: SelectTokenVM.Action.shouldShowHUD
+                        ))
+                    }
+                }, alignment: .center
+            )
         }
         .navigate(
             using: store.scope(

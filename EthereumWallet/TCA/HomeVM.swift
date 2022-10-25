@@ -85,24 +85,23 @@ enum HomeVM {
 
             state.shouldShowHUD = true
 
-            let address = state.address
             let flow = Future<String, AppError> { promise in
                 Task.detached(priority: .background) {
                     let web3 = await Ethereum.shared.web3()
-                    let toAddress = EthereumAddress(to)!
-                    let amount = Utilities.parseToBigUInt(valueEth, units: .eth)!
-
+                   
                     var transaction: CodableTransaction = .emptyTransaction
-                    transaction.from = address
-                    transaction.value = amount
-                    transaction.gasLimitPolicy = .automatic
-                    transaction.gasPricePolicy = .automatic
-
+                    transaction.from = transaction.sender
+                    transaction.to = EthereumAddress(to)!
+                    transaction.value = Utilities.parseToBigUInt(valueEth, units: .eth)!
+                    transaction.gasLimitPolicy = .manual(78423)
+                    transaction.gasPricePolicy = .manual(20000000000)
+                    
                     do {
                         let result = try await web3.eth.send(transaction)
                         let hash = result.transaction.hash!
                         promise(.success(String(data: hash, encoding: .utf8)!))
                     } catch {
+                        print(error.localizedDescription)
                         promise(.failure(AppError.plain(error.localizedDescription)))
                     }
                 }
