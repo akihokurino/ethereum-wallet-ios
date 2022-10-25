@@ -31,17 +31,8 @@ enum SelectTokenVM {
 
             let flow = Future<ERC20Token, AppError> { promise in
                 Task.detached(priority: .background) {
-                    let web3 = await Ethereum.shared.web3()
-                    let contract = web3.contract(Web3.Utils.erc20ABI, at: address, abiVersion: 2)!
-
                     do {
-                        let result = try await contract.createReadOperation(
-                            "name",
-                            parameters: [],
-                            extraData: Data()
-                        )!.callContractMethod()
-                        let name = result["0"] as! String
-                        let token = ERC20Token(address: address, name: name)
+                        let token = try await Ethereum.shared.erc20Contract(at: address)
                         var next = DataStore.shared.getTokens()
                         next.append(token.data)
                         DataStore.shared.saveTokens(val: next)

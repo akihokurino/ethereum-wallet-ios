@@ -1,8 +1,8 @@
+import BigInt
 import Combine
 import ComposableArchitecture
 import Core
 import Foundation
-import BigInt
 
 enum HomeVM {
     static let reducer = AnyReducer<State, Action, Environment> { state, action, environment in
@@ -14,14 +14,10 @@ enum HomeVM {
 
             state.shouldShowHUD = true
 
-            let address = state.address
             let flow = Future<String, AppError> { promise in
                 Task.detached(priority: .background) {
-                    let web3 = await Ethereum.shared.web3()
                     do {
-                        let balanceWei: BigUInt = try await web3.eth.getBalance(for: address)
-                        let balanceEther = Units.toEtherString(wei: balanceWei)
-                        promise(.success(balanceEther))
+                        promise(.success(try await Ethereum.shared.balance()))
                     } catch {
                         promise(.failure(AppError.plain(error.localizedDescription)))
                     }
@@ -44,14 +40,10 @@ enum HomeVM {
         case .startRefresh:
             state.shouldPullToRefresh = true
 
-            let address = state.address
             let flow = Future<String, AppError> { promise in
                 Task.detached(priority: .background) {
-                    let web3 = await Ethereum.shared.web3()
                     do {
-                        let balanceWei = try await web3.eth.getBalance(for: address)
-                        let balanceEther = Units.toEtherString(wei: balanceWei)
-                        promise(.success(balanceEther))
+                        promise(.success(try await Ethereum.shared.balance()))
                     } catch {
                         promise(.failure(AppError.plain(error.localizedDescription)))
                     }
@@ -87,19 +79,8 @@ enum HomeVM {
 
             let flow = Future<String, AppError> { promise in
                 Task.detached(priority: .background) {
-                    
-                    let web3 = await Ethereum.shared.web3()
-                    var transaction: CodableTransaction = .emptyTransaction
-                    transaction.from = transaction.sender
-                    transaction.to = EthereumAddress(to)!
-                    transaction.value = Utilities.parseToBigUInt(valueEth, units: .eth)!
-                    transaction.gasLimitPolicy = .automatic
-                    transaction.gasPricePolicy = .automatic
-                    
                     do {
-                        let result = try await web3.eth.send(transaction)
-                        let hash = result.transaction.hash!
-                        promise(.success(String(data: hash, encoding: .utf8)!))
+                        promise(.success(try await Ethereum.shared.sendEth(to: EthereumAddress(to)!, amount: valueEth)))
                     } catch {
                         print("send tx error: \(error)")
                         promise(.failure(AppError.plain(error.localizedDescription)))

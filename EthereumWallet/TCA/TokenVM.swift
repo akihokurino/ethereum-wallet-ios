@@ -15,16 +15,11 @@ enum TokenVM {
 
             state.shouldShowHUD = true
 
-            let address = state.address
             let token = state.token
             let flow = Future<String, AppError> { promise in
                 Task.detached(priority: .background) {
-                    let web3 = await Ethereum.shared.web3()
-                    let contract = ERC20(web3: web3, provider: web3.provider, address: token.address, transaction: .emptyTransaction)
-
                     do {
-                        let balance = try await contract.getBalance(account: address)
-                        promise(.success(String(balance)))
+                        promise(.success(try await Ethereum.shared.erc20ContractBalance(at: token.address)))
                     } catch {
                         promise(.failure(AppError.plain(error.localizedDescription)))
                     }
@@ -47,16 +42,11 @@ enum TokenVM {
         case .startRefresh:
             state.shouldPullToRefresh = true
 
-            let address = state.address
             let token = state.token
             let flow = Future<String, AppError> { promise in
                 Task.detached(priority: .background) {
-                    let web3 = await Ethereum.shared.web3()
-                    let contract = ERC20(web3: web3, provider: web3.provider, address: token.address, transaction: .emptyTransaction)
-
                     do {
-                        let balance = try await contract.getBalance(account: address)
-                        promise(.success(String(balance)))
+                        promise(.success(try await Ethereum.shared.erc20ContractBalance(at: token.address)))
                     } catch {
                         promise(.failure(AppError.plain(error.localizedDescription)))
                     }
@@ -87,27 +77,17 @@ enum TokenVM {
             if amount.isEmpty || to.isEmpty {
                 return .none
             }
+            guard let toAddress = EthereumAddress(to) else {
+                return .none
+            }
 
             state.shouldShowHUD = true
 
-            let address = state.address
-            let toAddress = EthereumAddress(to)!
             let token = state.token
-            
             let flow = Future<String, AppError> { promise in
                 Task.detached(priority: .background) {
-                    // TODO: https://github.com/skywinder/web3swift/blob/develop/Tests/web3swiftTests/localTests/ERC20Tests.swift#L36
-                    let web3 = await Ethereum.shared.web3()
-                    var transaction: CodableTransaction = .emptyTransaction
-                    transaction.from = address
-                    transaction.to = toAddress
-                    transaction.gasLimitPolicy = .automatic
-                    transaction.gasPricePolicy = .automatic
-                    let contract = ERC20(web3: web3, provider: web3.provider, address: token.address, transaction: transaction)
                     do {
-                        let result = try await contract.transfer(from: address, to: toAddress, amount: amount).writeToChain(password: Ethereum.shared.password)
-                        let hash = result.transaction.hash!
-                        promise(.success(String(data: hash, encoding: .utf8)!))
+                        promise(.success(try await Ethereum.shared.erc20ContractTransfer(at: token.address, to: toAddress, amount: amount)))
                     } catch {
                         print("send tx error: \(error)")
                         promise(.failure(AppError.plain(error.localizedDescription)))

@@ -1,3 +1,4 @@
+import BigInt
 import Core
 import Foundation
 import web3swift
@@ -5,8 +6,7 @@ import web3swift
 final class Ethereum {
     private var cli: Web3?
     private var keystore: EthereumKeystoreV3!
-    
-    let password = "web3swift"
+    private let password = "web3swift"
 
     static let shared = Ethereum()
 
@@ -44,10 +44,59 @@ final class Ethereum {
         cli = web3
         return web3
     }
-    
+
     func export() throws -> String {
         let keystoreManager = KeystoreManager([keystore])
         let pkData = try keystoreManager.UNSAFE_getPrivateKeyData(password: password, account: address)
         return pkData.toHexString()
+    }
+
+    func balance() async throws -> String {
+        let balanceWei: BigUInt = try await web3().eth.getBalance(for: address)
+        return Units.toEtherString(wei: balanceWei)
+    }
+
+    func sendEth(to: EthereumAddress, amount: String) async throws -> String {
+        var transaction: CodableTransaction = .emptyTransaction
+        transaction.from = address
+        transaction.to = to
+        transaction.value = Utilities.parseToBigUInt(amount, units: .eth)!
+        transaction.gasLimitPolicy = .automatic
+        transaction.gasPricePolicy = .automatic
+        let result = try await web3().eth.send(transaction)
+        let hash = result.transaction.hash!
+        return String(data: hash, encoding: .utf8)!
+    }
+
+    func erc20Contract(at: EthereumAddress) async throws -> ERC20Token {
+        let contract = await web3().contract(Web3.Utils.erc20ABI, at: at, abiVersion: 2)!
+        let result = try await contract.createReadOperation(
+            "name",
+            parameters: [],
+            extraData: Data()
+        )!.callContractMethod()
+        let name = result["0"] as! String
+        return ERC20Token(address: address, name: name)
+    }
+
+    func erc20ContractBalance(at: EthereumAddress) async throws -> String {
+        let web3 = await web3()
+        let contract = ERC20(web3: web3, provider: web3.provider, address: at, transaction: .emptyTransaction)
+        let balance = try await contract.getBalance(account: address)
+        return String(balance)
+    }
+
+    func erc20ContractTransfer(at: EthereumAddress, to: EthereumAddress, amount: String) async throws -> String {
+        // TODO: https://github.com/skywinder/web3swift/blob/develop/Tests/web3swiftTests/localTests/ERC20Tests.swift#L36
+        let web3 = await web3()
+        var transaction: CodableTransaction = .emptyTransaction
+        transaction.from = address
+        transaction.to = to
+        transaction.gasLimitPolicy = .automatic
+        transaction.gasPricePolicy = .automatic
+        let contract = ERC20(web3: web3, provider: web3.provider, address: at, transaction: transaction)
+        let result = try await contract.transfer(from: address, to: to, amount: amount).writeToChain(password: password)
+        let hash = result.transaction.hash!
+        return String(data: hash, encoding: .utf8)!
     }
 }
