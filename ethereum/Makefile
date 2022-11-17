@@ -29,7 +29,7 @@ init-private-net:
 	geth --datadir ./private-net/ init ./private-net/genesis.json
 
 console-private-net:
-	geth --networkid "10" --port 8545 --http --nodiscover --datadir ./private-net/ --allow-insecure-unlock --unlock 0,1,2 --password ./private-net/password console
+	geth --networkid "10" --port 8545 --http --nodiscover --datadir ./private-net/ --allow-insecure-unlock --unlock 0,1 --password ./private-net/password console
 
 reset-private-net:
 	rm -rf ./private-net/geth/*

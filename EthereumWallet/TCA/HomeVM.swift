@@ -76,7 +76,7 @@ enum HomeVM {
             }
 
             state.shouldShowHUD = true
-
+        
             let flow = Future<String, AppError> { promise in
                 Task.detached(priority: .background) {
                     do {
