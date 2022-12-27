@@ -8,8 +8,8 @@
 - ethereum
 - goerli
 - geth ( https://geth.ethereum.org/ )
-- truffle v5.4.28 ( https://trufflesuite.com/ )
-- solidity v0.8.11
+- hardhat ( https://hardhat.org/ )
+- solidity v0.8.17
 - open zeppelin ( https://openzeppelin.com/ )
 - infura ( https://infura.io/ )
 
@@ -26,12 +26,6 @@
 - get erc20 token balance
 - send erc20 token
 - fetch all transactions related by my address
-
-## ERC20
-
-- TokenA ( 0x58bBe70EF8239B9d09F10a70F0FF291DFD70f8Df )
-- TokenB ( 0x6f89e3F74216A78778667f86A7e32449CB61Bed7 )
-- TokenC ( 0x46005CbED485e6BFbE3F7Dc50D8BE5553Af989e1 )
 
 ## Images
 

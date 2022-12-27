@@ -1,29 +1,24 @@
-MAKEFLAGS=--no-builtin-rules --no-builtin-variables --always-make
-ROOT := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
-
 vendor:
 	npm install
 
-truffle-init:
-	./node_modules/.bin/truffle init
+compile:
+	npx hardhat compile
 
-truffle-compile:
-	./node_modules/.bin/truffle compile
+.PHONY: test
+test:
+	npx hardhat test
 
-truffle-develop:
-	./node_modules/.bin/truffle develop
+node:
+	npx hardhat node
 
-truffle-migrate-private-net:
-	./node_modules/.bin/truffle migrate --network development
+deploy-geth:
+	npx hardhat run scripts/deploy.ts --network geth
 
-truffle-console-private-net:
-	./node_modules/.bin/truffle console --network development
+deploy-hardhat:
+	npx hardhat run scripts/deploy.ts --network hardhat
 
-truffle-migrate-goerli-net:
-	./node_modules/.bin/truffle migrate --network goerli
-
-truffle-console-goerli-net:
-	./node_modules/.bin/truffle console --network goerli
+deploy-goerli:
+	npx hardhat run scripts/deploy.ts --network goerli
 
 init-private-net:
 	geth --datadir ./private-net/ init ./private-net/genesis.json
@@ -39,3 +34,9 @@ reset-private-net:
 
 import-private-net:
 	geth account import --datadir ./private-net/ ./private-net/key.prv
+
+extract-abi:
+	cat artifacts/contracts/SimpleToken.sol/SimpleToken.json | jq '.abi' > artifacts/contracts/SimpleToken.sol/SimpleToken.abi.json
+
+show-abi:
+	cat artifacts/contracts/SimpleToken.sol/SimpleToken.json | jq '.abi' | jq '@json' -c

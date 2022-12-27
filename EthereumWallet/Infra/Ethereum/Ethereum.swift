@@ -77,7 +77,7 @@ final class Ethereum {
             extraData: Data()
         )!.callContractMethod()
         let name = result["0"] as! String
-        return ERC20Token(address: address, name: name)
+        return ERC20Token(address: at, name: name)
     }
 
     func erc20ContractBalance(at: EthereumAddress) async throws -> String {
