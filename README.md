@@ -3,7 +3,7 @@
 - swiftui
 - combine
 - the composable architecture ( https://github.com/pointfreeco/swift-composable-architecture ）
-- web3swift ( https://github.com/skywinder/web3swift )
+- web3swift v3.0.6 ( https://github.com/skywinder/web3swift )
 - alamofire ( https://github.com/Alamofire/Alamofire )
 - ethereum
 - goerli
@@ -26,6 +26,10 @@
 - get erc20 token balance
 - send erc20 token
 - fetch all transactions related by my address
+
+## ERC20
+
+- 0x7a9c48fE93f6759AEe6532C124a65c96e9810FE7
 
 ## Images
 

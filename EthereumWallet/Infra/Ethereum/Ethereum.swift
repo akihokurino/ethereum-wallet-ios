@@ -62,8 +62,8 @@ final class Ethereum {
         transaction.from = address
         transaction.to = to
         transaction.value = Utilities.parseToBigUInt(amount, units: .eth)!
-        transaction.gasLimitPolicy = .automatic
-        transaction.gasPricePolicy = .automatic
+        transaction.gasLimit = 8500000
+        transaction.gasPrice = 40000000000
         let result = try await web3().eth.send(transaction)
         let hash = result.transaction.hash!
         return String(data: hash, encoding: .utf8)!
@@ -95,8 +95,8 @@ final class Ethereum {
         var transaction: CodableTransaction = .emptyTransaction
         transaction.from = address
         transaction.to = to
-        transaction.gasLimitPolicy = .manual(8500000)
-        transaction.gasPricePolicy = .manual(40000000000)
+        transaction.gasLimit = 8500000
+        transaction.gasPrice = 40000000000
         transaction.callOnBlock = .latest
         contract.transaction = transaction
         let tx = contract.createWriteOperation("transfer", parameters: [to, amount] as [AnyObject], extraData: Data())!

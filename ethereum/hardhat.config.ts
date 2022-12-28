@@ -17,7 +17,6 @@ const config: HardhatUserConfig = {
   networks: {
     geth: {
       url: "http://127.0.0.1:8545/",
-      accounts: [process.env.WALLET_SECRET!],
       chainId: chainIds.geth,
     },
     goerli: {

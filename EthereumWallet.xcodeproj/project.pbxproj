@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		022748BD27990A2A0066B557 /* Navigation+TCA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 022748BC27990A2A0066B557 /* Navigation+TCA.swift */; };
-		023E65D52907CC2400E831BC /* web3swift in Frameworks */ = {isa = PBXBuildFile; productRef = 023E65D42907CC2400E831BC /* web3swift */; };
 		023E65D82907CC3200E831BC /* ActivityIndicatorView in Frameworks */ = {isa = PBXBuildFile; productRef = 023E65D72907CC3200E831BC /* ActivityIndicatorView */; };
 		023E65DB2907CC4000E831BC /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 023E65DA2907CC4000E831BC /* Alamofire */; };
 		023E65DE2907CC7500E831BC /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 023E65DD2907CC7500E831BC /* ComposableArchitecture */; };
@@ -23,6 +22,7 @@
 		02A0B2BD2795660F00AE925C /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A0B2BC2795660F00AE925C /* RootView.swift */; };
 		02A0B2BF2795661000AE925C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02A0B2BE2795661000AE925C /* Assets.xcassets */; };
 		02A0B2C22795661000AE925C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02A0B2C12795661000AE925C /* Preview Assets.xcassets */; };
+		02C9A89E295C3C7100761BC8 /* web3swift in Frameworks */ = {isa = PBXBuildFile; productRef = 02C9A89D295C3C7100761BC8 /* web3swift */; };
 		02DE56442795670400E28F40 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE56432795670400E28F40 /* HistoryView.swift */; };
 		02DE56462795670F00E28F40 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE56452795670F00E28F40 /* HomeView.swift */; };
 		02DE565527956B5E00E28F40 /* RootVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE565427956B5E00E28F40 /* RootVM.swift */; };
@@ -72,10 +72,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				023E65E02907CC7500E831BC /* Dependencies in Frameworks */,
+				02C9A89E295C3C7100761BC8 /* web3swift in Frameworks */,
 				023E65DB2907CC4000E831BC /* Alamofire in Frameworks */,
 				023E65D82907CC3200E831BC /* ActivityIndicatorView in Frameworks */,
 				023E65DE2907CC7500E831BC /* ComposableArchitecture in Frameworks */,
-				023E65D52907CC2400E831BC /* web3swift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -211,11 +211,11 @@
 			);
 			name = EthereumWallet;
 			packageProductDependencies = (
-				023E65D42907CC2400E831BC /* web3swift */,
 				023E65D72907CC3200E831BC /* ActivityIndicatorView */,
 				023E65DA2907CC4000E831BC /* Alamofire */,
 				023E65DD2907CC7500E831BC /* ComposableArchitecture */,
 				023E65DF2907CC7500E831BC /* Dependencies */,
+				02C9A89D295C3C7100761BC8 /* web3swift */,
 			);
 			productName = EthereumWallet;
 			productReference = 02A0B2B72795660F00AE925C /* イーサウォレット.app */;
@@ -246,10 +246,10 @@
 			);
 			mainGroup = 02A0B2AE2795660F00AE925C;
 			packageReferences = (
-				023E65D32907CC2400E831BC /* XCRemoteSwiftPackageReference "web3swift" */,
 				023E65D62907CC3200E831BC /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */,
 				023E65D92907CC4000E831BC /* XCRemoteSwiftPackageReference "Alamofire" */,
 				023E65DC2907CC7500E831BC /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				02C9A89C295C3C7100761BC8 /* XCRemoteSwiftPackageReference "web3swift" */,
 			);
 			productRefGroup = 02A0B2B82795660F00AE925C /* Products */;
 			projectDirPath = "";
@@ -447,8 +447,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"EthereumWallet/Preview Content\"";
 				DEVELOPMENT_TEAM = 39KF2M8S75;
@@ -467,7 +467,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "app.akiho.ethereum-wallet";
 				PRODUCT_NAME = "イーサウォレット";
-				PROVISIONING_PROFILE_SPECIFIER = "ethereum wallet dev";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -482,8 +482,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"EthereumWallet/Preview Content\"";
 				DEVELOPMENT_TEAM = 39KF2M8S75;
@@ -502,7 +502,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "app.akiho.ethereum-wallet";
 				PRODUCT_NAME = "イーサウォレット";
-				PROVISIONING_PROFILE_SPECIFIER = "ethereum wallet dev";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -536,14 +536,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		023E65D32907CC2400E831BC /* XCRemoteSwiftPackageReference "web3swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/skywinder/web3swift.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		023E65D62907CC3200E831BC /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/exyte/ActivityIndicatorView.git";
@@ -568,14 +560,17 @@
 				kind = branch;
 			};
 		};
+		02C9A89C295C3C7100761BC8 /* XCRemoteSwiftPackageReference "web3swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/skywinder/web3swift.git";
+			requirement = {
+				kind = exactVersion;
+				version = 3.0.6;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		023E65D42907CC2400E831BC /* web3swift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 023E65D32907CC2400E831BC /* XCRemoteSwiftPackageReference "web3swift" */;
-			productName = web3swift;
-		};
 		023E65D72907CC3200E831BC /* ActivityIndicatorView */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 023E65D62907CC3200E831BC /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */;
@@ -595,6 +590,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 023E65DC2907CC7500E831BC /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = Dependencies;
+		};
+		02C9A89D295C3C7100761BC8 /* web3swift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 02C9A89C295C3C7100761BC8 /* XCRemoteSwiftPackageReference "web3swift" */;
+			productName = web3swift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
