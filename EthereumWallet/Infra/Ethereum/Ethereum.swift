@@ -64,9 +64,18 @@ final class Ethereum {
         transaction.value = Utilities.parseToBigUInt(amount, units: .eth)!
         transaction.gasLimit = 8500000
         transaction.gasPrice = 40000000000
-        let result = try await web3().eth.send(transaction)
-        let hash = result.transaction.hash!
-        return String(data: hash, encoding: .utf8)!
+        transaction.chainID = BigUInt(5)
+
+        let resolver = await PolicyResolver(provider: web3().provider)
+        try await resolver.resolveAll(for: &transaction)
+        try Web3Signer.signTX(transaction: &transaction,
+                              keystore: keystore,
+                              account: address,
+                              password: password)
+
+        guard let txEncoded = transaction.encode() else { return "" }
+        let res = try await web3().eth.send(raw: txEncoded)
+        return res.transaction.hash?.toHexString() ?? ""
     }
 
     func erc20Contract(at: EthereumAddress) async throws -> ERC20Token {
@@ -101,7 +110,6 @@ final class Ethereum {
         contract.transaction = transaction
         let tx = contract.createWriteOperation("transfer", parameters: [to, amount] as [AnyObject], extraData: Data())!
         let result = try await tx.writeToChain(password: password)
-        let hash = result.transaction.hash!
-        return String(data: hash, encoding: .utf8)!
+        return result.transaction.hash?.toHexString() ?? ""
     }
 }
