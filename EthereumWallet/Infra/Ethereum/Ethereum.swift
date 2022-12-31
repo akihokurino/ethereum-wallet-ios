@@ -7,6 +7,8 @@ final class Ethereum {
     private var cli: Web3?
     private var keystore: EthereumKeystoreV3!
     private let password = "web3swift"
+    private let gasLimit: BigUInt = 8500000
+    private let gasPrice: BigUInt = 40000000000
 
     static let shared = Ethereum()
 
@@ -33,7 +35,7 @@ final class Ethereum {
         keystore = try! EthereumKeystoreV3(privateKey: privateKey!, password: password)!
     }
 
-    func web3() async -> Web3 {
+    private func web3() async -> Web3 {
         if let cli = self.cli {
             return cli
         }
@@ -56,17 +58,16 @@ final class Ethereum {
         return Units.toEtherString(wei: balanceWei)
     }
 
-    // TODO: https://github.com/skywinder/web3swift/blob/master/Tests/web3swiftTests/localTests/UserCases.swift#L37
     func sendEth(to: EthereumAddress, amount: String) async throws -> String {
         var transaction: CodableTransaction = .emptyTransaction
         transaction.from = address
         transaction.to = to
         transaction.value = Utilities.parseToBigUInt(amount, units: .eth)!
-        transaction.gasLimit = 8500000
-        transaction.gasPrice = 40000000000
-        transaction.chainID = BigUInt(5)
+        transaction.gasLimit = gasLimit
+        transaction.gasPrice = gasPrice
+        transaction.chainID = BigUInt(Env["NETWORK_CHAIN_ID"]!)
 
-        let resolver = await PolicyResolver(provider: web3().provider)
+        let resolver = PolicyResolver(provider: await web3().provider)
         try await resolver.resolveAll(for: &transaction)
         try Web3Signer.signTX(transaction: &transaction,
                               keystore: keystore,
@@ -75,7 +76,9 @@ final class Ethereum {
 
         guard let txEncoded = transaction.encode() else { return "" }
         let res = try await web3().eth.send(raw: txEncoded)
-        return res.transaction.hash?.toHexString() ?? ""
+        let txhash = res.transaction.hash?.toHexString() ?? ""
+        print("result tx: \(txhash)")
+        return txhash
     }
 
     func erc20Contract(at: EthereumAddress) async throws -> ERC20Token {
@@ -89,27 +92,46 @@ final class Ethereum {
         return ERC20Token(address: at, name: name)
     }
 
-    func erc20ContractBalance(at: EthereumAddress) async throws -> String {
+    func erc20Balance(at: EthereumAddress) async throws -> String {
         let web3 = await web3()
         let contract = ERC20(web3: web3, provider: web3.provider, address: at, transaction: .emptyTransaction)
         let balance = try await contract.getBalance(account: address)
         return String(balance)
     }
 
-    // TODO: https://github.com/skywinder/web3swift/blob/develop/Tests/web3swiftTests/localTests/ERC20Tests.swift#L36
-    func erc20ContractTransfer(at: EthereumAddress, to: EthereumAddress, amount: String) async throws -> String {
+    // FIXME: https://github.com/web3swift-team/web3swift/issues/711
+    func erc20Transfer(at: EthereumAddress, to: EthereumAddress, amount: String) async throws -> String {
         let web3 = await web3()
-        let amount = Utilities.parseToBigUInt(amount, decimals: 0)!
         let contract = web3.contract(Web3.Utils.erc20ABI, at: at, abiVersion: 2)!
+        let amount = Utilities.parseToBigUInt(amount, decimals: 0)!
+        let method = "transfer"
+
         var transaction: CodableTransaction = .emptyTransaction
         transaction.from = address
         transaction.to = to
-        transaction.gasLimit = 8500000
-        transaction.gasPrice = 40000000000
+        transaction.gasLimit = gasLimit
+        transaction.gasPrice = gasPrice
+        transaction.chainID = BigUInt(Env["NETWORK_CHAIN_ID"]!)
         transaction.callOnBlock = .latest
-        contract.transaction = transaction
-        let tx = contract.createWriteOperation("transfer", parameters: [to, amount] as [AnyObject], extraData: Data())!
-        let result = try await tx.writeToChain(password: password)
-        return result.transaction.hash?.toHexString() ?? ""
+        transaction.data = contract.contract.method(method, parameters: [to, amount] as [AnyObject], extraData: Data())!
+
+        let tx: WriteOperation = .init(transaction: transaction, web3: web3, contract: contract.contract, method: method)
+        let res = try await tx.writeToChain(password: password)
+        let txhash = res.transaction.hash?.toHexString() ?? ""
+        print("result tx: \(txhash)")
+        return txhash
+
+//        let contract = ERC20(web3: web3, provider: web3.provider, address: at, transaction: .emptyTransaction)
+//        let tx = try await contract.transfer(from: address, to: to, amount: amount)
+//        tx.transaction.from = address
+//        tx.transaction.to = to
+//        tx.transaction.gasLimit = gasLimit
+//        tx.transaction.gasPrice = gasPrice
+//        tx.transaction.chainID = BigUInt(Env["NETWORK_CHAIN_ID"]!)
+//        tx.transaction.callOnBlock = .latest
+//        let res = try await tx.writeToChain(password: password)
+//        let txhash = res.transaction.hash?.toHexString() ?? ""
+//        print("result tx: \(txhash)")
+//        return txhash
     }
 }

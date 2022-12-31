@@ -19,7 +19,7 @@ enum TokenVM {
             let flow = Future<String, AppError> { promise in
                 Task.detached(priority: .background) {
                     do {
-                        promise(.success(try await Ethereum.shared.erc20ContractBalance(at: token.address)))
+                        promise(.success(try await Ethereum.shared.erc20Balance(at: token.address)))
                     } catch {
                         promise(.failure(AppError.plain(error.localizedDescription)))
                     }
@@ -46,7 +46,7 @@ enum TokenVM {
             let flow = Future<String, AppError> { promise in
                 Task.detached(priority: .background) {
                     do {
-                        promise(.success(try await Ethereum.shared.erc20ContractBalance(at: token.address)))
+                        promise(.success(try await Ethereum.shared.erc20Balance(at: token.address)))
                     } catch {
                         promise(.failure(AppError.plain(error.localizedDescription)))
                     }
@@ -87,7 +87,7 @@ enum TokenVM {
             let flow = Future<String, AppError> { promise in
                 Task.detached(priority: .background) {
                     do {
-                        promise(.success(try await Ethereum.shared.erc20ContractTransfer(at: token.address, to: toAddress, amount: amount)))
+                        promise(.success(try await Ethereum.shared.erc20Transfer(at: token.address, to: toAddress, amount: amount)))
                     } catch {
                         print("send tx error: \(error)")
                         promise(.failure(AppError.plain(error.localizedDescription)))
@@ -141,8 +141,8 @@ extension TokenVM {
         var isInitialized = false
         var balance = ""
 
-        var inputAmount = ""
-        var inputToAddress = ""
+        var inputAmount = "10"
+        var inputToAddress = "0x0E91D6613a84d7C8b72a289D8b275AF7717C3d2E"
     }
 
     struct Environment {
