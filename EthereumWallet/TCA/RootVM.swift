@@ -10,7 +10,7 @@ enum RootVM {
             state.shouldShowHUD = true
 
             let flow = Future<EthereumAddress, AppError> { promise in
-                Task.detached(priority: .background) {
+                Task.detached(priority: .high) {
                     promise(.success(Ethereum.shared.address))
                 }
             }

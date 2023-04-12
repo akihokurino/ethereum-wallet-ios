@@ -15,7 +15,7 @@ enum HomeVM {
             state.shouldShowHUD = true
 
             let flow = Future<String, AppError> { promise in
-                Task.detached(priority: .background) {
+                Task.detached(priority: .high) {
                     do {
                         promise(.success(try await Ethereum.shared.balance()))
                     } catch {
@@ -41,7 +41,7 @@ enum HomeVM {
             state.shouldPullToRefresh = true
 
             let flow = Future<String, AppError> { promise in
-                Task.detached(priority: .background) {
+                Task.detached(priority: .high) {
                     do {
                         promise(.success(try await Ethereum.shared.balance()))
                     } catch {
@@ -78,7 +78,7 @@ enum HomeVM {
             state.shouldShowHUD = true
         
             let flow = Future<String, AppError> { promise in
-                Task.detached(priority: .background) {
+                Task.detached(priority: .high) {
                     do {
                         promise(.success(try await Ethereum.shared.sendEth(to: EthereumAddress(to)!, amount: valueEth)))
                     } catch {
@@ -111,7 +111,7 @@ enum HomeVM {
             state.shouldShowHUD = true
 
             let flow = Future<String, AppError> { promise in
-                Task.detached(priority: .background) {
+                Task.detached(priority: .high) {
                     do {
                         promise(.success(try Ethereum.shared.export()))
                     } catch {

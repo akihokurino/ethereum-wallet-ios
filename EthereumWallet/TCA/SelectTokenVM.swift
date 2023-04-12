@@ -30,7 +30,7 @@ enum SelectTokenVM {
             state.shouldShowHUD = true
 
             let flow = Future<ERC20Token, AppError> { promise in
-                Task.detached(priority: .background) {
+                Task.detached(priority: .high) {
                     do {
                         let token = try await Ethereum.shared.erc20Contract(at: address)
                         var next = DataStore.shared.getTokens()

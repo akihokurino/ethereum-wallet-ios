@@ -17,7 +17,7 @@ enum TokenVM {
 
             let token = state.token
             let flow = Future<String, AppError> { promise in
-                Task.detached(priority: .background) {
+                Task.detached(priority: .high) {
                     do {
                         promise(.success(try await Ethereum.shared.erc20Balance(at: token.address)))
                     } catch {
@@ -44,7 +44,7 @@ enum TokenVM {
 
             let token = state.token
             let flow = Future<String, AppError> { promise in
-                Task.detached(priority: .background) {
+                Task.detached(priority: .high) {
                     do {
                         promise(.success(try await Ethereum.shared.erc20Balance(at: token.address)))
                     } catch {
@@ -85,7 +85,7 @@ enum TokenVM {
 
             let token = state.token
             let flow = Future<String, AppError> { promise in
-                Task.detached(priority: .background) {
+                Task.detached(priority: .high) {
                     do {
                         promise(.success(try await Ethereum.shared.erc20Transfer(at: token.address, to: toAddress, amount: amount)))
                     } catch {
